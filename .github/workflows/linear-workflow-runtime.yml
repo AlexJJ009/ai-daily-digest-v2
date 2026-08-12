@@ -26,6 +26,7 @@ jobs:
 
       - name: Restore the fork remotes
         run: |
+          git remote set-url origin https://github.com/AlexJJ009/ai-daily-digest-v2.git
           git fetch --no-tags origin v2:refs/remotes/origin/v2
           git remote add upstream https://github.com/AllenX-Li/ai-daily-digest.git
 
