@@ -8,6 +8,9 @@
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "check:fork": "bun scripts/check-fork-contract.ts",
+    "check:gate": "bun scripts/check-linear-workflow-runtime.ts",
+    "check:secrets": "bun scripts/check-candidate-secrets.ts",
+    "render:batch": "bun scripts/render-linear-workflow-batch.ts",
     "audit:sources": "bun scripts/audit-sources.ts",
     "check": "bun run typecheck && bun test && bun run check:fork"
   },
