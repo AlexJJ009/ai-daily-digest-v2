@@ -25,12 +25,15 @@ function content(xml: string, tagName: string): string {
   return cdata.trim();
 }
 
-function attribute(xml: string, tagName: string, attributeName: string): string {
-  return (
-    xml.match(
-      new RegExp(`<${tagName}[^>]*\\s${attributeName}=["']([^"']*)["'][^>]*/?>`, 'i'),
-    )?.[1] ?? ''
-  );
+function tagAttribute(tag: string, attributeName: string): string {
+  return tag.match(new RegExp(`\\s${attributeName}=["']([^"']*)["']`, 'i'))?.[1] ?? '';
+}
+
+function atomEntryLink(entry: string): string {
+  const links = entry.match(/<link\b[^>]*\/?>/gi) ?? [];
+  const alternate = links.find((link) => tagAttribute(link, 'rel').toLowerCase() === 'alternate');
+  const implicitAlternate = links.find((link) => tagAttribute(link, 'rel') === '');
+  return tagAttribute(alternate ?? implicitAlternate ?? links[0] ?? '', 'href');
 }
 
 export function parseFeedItems(xml: string): FeedItem[] {
@@ -42,7 +45,7 @@ export function parseFeedItems(xml: string): FeedItem[] {
     const item = match[1] ?? '';
     const title = stripHtml(content(item, 'title'));
     const link = atom
-      ? attribute(item, 'link[^>]*rel="alternate"', 'href') || attribute(item, 'link', 'href')
+      ? atomEntryLink(item)
       : content(item, 'link') || content(item, 'guid');
     const publishedAt = atom
       ? content(item, 'published') || content(item, 'updated')

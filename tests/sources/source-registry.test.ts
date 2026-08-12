@@ -48,6 +48,18 @@ describe('source registry', () => {
       },
     ]);
   });
+
+  test('selects an Atom alternate link independent of attribute order', async () => {
+    const xml = await Bun.file(new URL('../fixtures/feeds/atom.xml', import.meta.url)).text();
+    expect(parseFeedItems(xml)).toEqual([
+      {
+        title: 'Attribute-order-safe links',
+        link: 'https://example.com/post-atom',
+        publishedAt: '2026-08-12T06:00:00Z',
+        description: 'Atom links select the article, not the feed.',
+      },
+    ]);
+  });
 });
 
 describe('source health and thresholds', () => {
