@@ -92,7 +92,7 @@ export class LarkCliGateway implements FeishuGateway {
 
   async listFolder(folderToken: string): Promise<FolderFile[]> {
     return parseFolderFiles(await this.execute([
-      'drive', 'files', 'list', '--folder-token', folderToken, '--page-all', '--page-limit', '20',
+      'drive', 'files', 'list', '--folder-token', folderToken, '--page-all',
     ]));
   }
 

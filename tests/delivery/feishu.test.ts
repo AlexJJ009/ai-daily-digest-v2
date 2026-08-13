@@ -109,9 +109,10 @@ describe('Feishu daily publication contract', () => {
       return responses.shift()!;
     });
     await publishDailyDigest(input(gateway));
-    expect(calls[0]?.slice(0, 7)).toEqual([
-      'drive', 'files', 'list', '--folder-token', 'folder', '--page-all', '--page-limit',
+    expect(calls[0]?.slice(0, 6)).toEqual([
+      'drive', 'files', 'list', '--folder-token', 'folder', '--page-all',
     ]);
+    expect(calls[0]).not.toContain('--page-limit');
     expect(calls[0]).not.toContain('search');
     expect(calls[1]).toContain('+create');
     expect(calls[2]).toContain('interactive');
