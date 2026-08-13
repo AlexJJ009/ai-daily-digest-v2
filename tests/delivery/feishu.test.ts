@@ -135,4 +135,19 @@ describe('Feishu daily publication contract', () => {
     expect(calls[1]).toContain('overwrite');
     expect(calls[1]).toContain('doc-one');
   });
+
+  test('maps open_id explicitly to the lark-cli user-id flag and rejects unknown types', async () => {
+    const calls: string[][] = [];
+    const gateway = new LarkCliGateway(async (args) => {
+      calls.push(args);
+      return { exitCode: 0, stdout: JSON.stringify({ message_id: 'message' }), stderr: '' };
+    });
+    await gateway.sendCard('ou_example', 'open_id', '{}', 'key');
+    expect(calls[0]).toContain('--user-id');
+    expect(calls[0]).toContain('ou_example');
+    await expect(gateway.sendCard('value', 'user_id', '{}', 'key')).rejects.toThrow(
+      'must be chat_id or open_id',
+    );
+    expect(calls).toHaveLength(1);
+  });
 });

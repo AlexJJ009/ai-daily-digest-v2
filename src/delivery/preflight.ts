@@ -25,8 +25,8 @@ export function validateProductionEnvironment(env: Record<string, string | undef
   if (!['responses', 'chat_completions'].includes(env.OPENAI_API_STYLE!)) {
     throw new Error('OPENAI_API_STYLE must be responses or chat_completions');
   }
-  if (!['chat_id', 'open_id', 'user_id'].includes(env.FEISHU_RECEIVE_ID_TYPE!)) {
-    throw new Error('FEISHU_RECEIVE_ID_TYPE must be chat_id, open_id, or user_id');
+  if (!['chat_id', 'open_id'].includes(env.FEISHU_RECEIVE_ID_TYPE!)) {
+    throw new Error('FEISHU_RECEIVE_ID_TYPE must be chat_id or open_id');
   }
   if (!['true', 'false'].includes(env.PRODUCTION_ENABLED!)) {
     throw new Error('PRODUCTION_ENABLED must be true or false');

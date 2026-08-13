@@ -31,4 +31,10 @@ describe('production preflight', () => {
     expect(shouldRunProduction('schedule', 'false')).toBeFalse();
     expect(shouldRunProduction('schedule', 'true')).toBeTrue();
   });
+
+  test('accepts open_id and rejects ambiguous user_id recipient configuration', () => {
+    expect(() => validateProductionEnvironment({ ...valid, FEISHU_RECEIVE_ID_TYPE: 'open_id' })).not.toThrow();
+    expect(() => validateProductionEnvironment({ ...valid, FEISHU_RECEIVE_ID_TYPE: 'user_id' }))
+      .toThrow('chat_id or open_id');
+  });
 });

@@ -111,7 +111,14 @@ export class LarkCliGateway implements FeishuGateway {
   }
 
   async sendCard(receiveId: string, receiveIdType: string, card: string, key: string): Promise<void> {
-    const recipientFlag = receiveIdType === 'chat_id' ? '--chat-id' : '--user-id';
+    const recipientFlag = receiveIdType === 'chat_id'
+      ? '--chat-id'
+      : receiveIdType === 'open_id'
+        ? '--user-id'
+        : undefined;
+    if (!recipientFlag) {
+      throw new Error('FEISHU_RECEIVE_ID_TYPE must be chat_id or open_id');
+    }
     await this.execute([
       'im', '+messages-send', recipientFlag, receiveId, '--msg-type', 'interactive',
       '--content', card, '--idempotency-key', key,
