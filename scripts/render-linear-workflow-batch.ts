@@ -48,6 +48,7 @@ console.log(JSON.stringify({
     base_sha: definition.baseSha,
     working_branch: definition.workingBranch,
     candidate_sha: candidate,
+    github_pull_request: null,
   }],
   permitted_paths: [
     'README.md', 'bun.lock', 'package.json', 'scripts/', 'src/', 'tests/',
