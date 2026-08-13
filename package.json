@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "check:fork": "bun scripts/check-fork-contract.ts",
     "check:gate": "bun scripts/check-linear-workflow-runtime.ts",
+    "check:production": "bun scripts/check-production-workflow.ts",
     "check:secrets": "bun scripts/check-candidate-secrets.ts",
     "render:batch": "bun scripts/render-linear-workflow-batch.ts",
     "audit:sources": "bun scripts/audit-sources.ts",

@@ -1,6 +1,6 @@
 import { $ } from 'bun';
 
-const FROZEN_BASE = '9f9f5cecdd76cb33087400ffd8004489801b6250';
+const FROZEN_BASE = process.env.FROZEN_BASE_SHA ?? '1c9a41162a2d47cf317e26060441319b9722596b';
 const EXPECTED_ORIGIN = 'https://github.com/AlexJJ009/ai-daily-digest-v2.git';
 const EXPECTED_UPSTREAM = 'https://github.com/AllenX-Li/ai-daily-digest.git';
 

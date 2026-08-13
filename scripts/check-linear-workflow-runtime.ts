@@ -9,6 +9,7 @@ const REQUIRED_COMMANDS = [
   'bun run typecheck',
   'bun test',
   'bun run check:fork',
+  'bun run check:production',
   'git diff --check',
   'bun run check:secrets',
   'bun run check:gate',

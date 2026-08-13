@@ -103,3 +103,24 @@ bun run audit:sources > source-health.json
 ```
 
 The command returns non-zero when coverage or recent-article thresholds fail.
+
+## Scheduled delivery
+
+`.github/workflows/digest.yml` contains one shared production DAG for the daily
+`0 0 * * *` schedule (08:00 in Asia/Shanghai) and manual dispatches. Scheduled
+runs are skipped unless the repository variable `PRODUCTION_ENABLED` is exactly
+`true`; manual dispatch remains available while it is `false` for controlled
+post-merge acceptance.
+
+All provider location, model, API style, and endpoint paths come from repository
+variables, so the workflow supports third-party OpenAI-compatible endpoints and
+does not require the official OpenAI host or a Gemini key. Credential values
+remain GitHub Secrets. A preflight step validates every required name before
+source fetching or model calls.
+
+After strict digest validation produces Markdown, RSS, and Pages source, the DAG
+pushes those artifacts to Git before invoking the pinned official
+`@larksuite/cli@1.0.86` with bot identity. The publisher enumerates the dedicated
+folder directly, exactly matches `AI Daily Digest · YYYY-MM-DD` using the
+Asia/Shanghai date, creates or updates one Docx, and only then sends the linked
+interactive card. Multiple exact Docx matches fail closed.
