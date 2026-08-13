@@ -1,0 +1,71 @@
+name: linear-workflow-runtime
+
+on:
+  pull_request:
+    branches: [v2]
+
+permissions:
+  contents: read
+
+jobs:
+  linear-workflow-runtime:
+    name: linear-workflow-runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Bun 1.3.11
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.3.11'
+
+      - name: Restore the fork remotes
+        run: |
+          git remote set-url origin https://github.com/AlexJJ009/ai-daily-digest-v2.git
+          git fetch --no-tags origin v2:refs/remotes/origin/v2
+          git remote add upstream https://github.com/AllenX-Li/ai-daily-digest.git
+
+      - name: Install frozen dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Test, including gate canaries
+        run: bun test
+
+      - name: Verify the fork contract
+        run: bun run check:fork
+
+      - name: Check the candidate diff
+        env:
+          BASE_SHA: 9f9f5cecdd76cb33087400ffd8004489801b6250
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git diff --check "$BASE_SHA" "$CANDIDATE_SHA"
+
+      - name: Scan the candidate tree for secrets
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: bun run check:secrets
+
+      - name: Validate the repository gate contract
+        run: bun run check:gate
+
+      - name: Run canonical Batch validation
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
+          LINEAR_WORKFLOW_SOURCE_SHA: 243acb2411db37bdc107f49210e110f37357387c
+        run: |
+          git init "$RUNNER_TEMP/linear-workflow"
+          git -C "$RUNNER_TEMP/linear-workflow" remote add origin https://github.com/AlexJJ009/agent-tools.git
+          git -C "$RUNNER_TEMP/linear-workflow" fetch --depth=1 origin "$LINEAR_WORKFLOW_SOURCE_SHA"
+          git -C "$RUNNER_TEMP/linear-workflow" checkout --detach FETCH_HEAD
+          bun run render:batch > "$RUNNER_TEMP/gon-15-batch.json"
+          PYTHONPATH="$RUNNER_TEMP/linear-workflow/linear_workflow/shared/runtime/src" \
+            python3 -m linear_workflow_runtime.cli batch-check \
+            --input "$RUNNER_TEMP/gon-15-batch.json"

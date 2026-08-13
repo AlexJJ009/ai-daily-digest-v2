@@ -1,0 +1,6 @@
+{
+  "id": "chatcmpl_fixture",
+  "choices": [
+    { "message": { "role": "assistant", "content": "{\"results\":[]}" } }
+  ]
+}

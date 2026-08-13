@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Fixture RSS</title>
+    <item>
+      <title><![CDATA[Typed &amp; tested feeds]]></title>
+      <link>https://example.com/post-1</link>
+      <pubDate>Wed, 12 Aug 2026 06:00:00 GMT</pubDate>
+      <description><![CDATA[<p>A fixture-backed RSS article.</p>]]></description>
+    </item>
+  </channel>
+</rss>

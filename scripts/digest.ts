@@ -1,143 +1,47 @@
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { homedir } from 'node:os';
 import process from 'node:process';
 
-// Load keys from ~/.openclaw/.env if not already in environment
-async function loadDotEnv(): Promise<void> {
-  const envPath = join(homedir(), '.openclaw', '.env');
-  try {
-    const content = await readFile(envPath, 'utf-8');
-    for (const line of content.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const eqIdx = trimmed.indexOf('=');
-      if (eqIdx === -1) continue;
-      const key = trimmed.slice(0, eqIdx).trim();
-      const val = trimmed.slice(eqIdx + 1).trim();
-      if (!process.env[key]) {
-        process.env[key] = val;
-      }
-    }
-  } catch {
-    // .env file not found or unreadable, skip
-  }
-}
+import {
+  DIGEST_SCHEMA_VERSION,
+  type CategoryId,
+  type DigestReport,
+} from '../src/contracts/digest';
+import {
+  createOpenAICompatibleClient,
+  loadOpenAICompatibleConfig,
+  type OpenAICompatibleClient,
+} from '../src/providers/openai-compatible';
+import { assertPublishableDigestReport } from '../src/validation/digest-report';
+import {
+  validateScoringOutput,
+  validateSummaryOutput,
+} from '../src/validation/model-output';
+import { parseFeedItems } from '../src/sources/feed';
+import {
+  assertSourceCoverage,
+  buildSourceHealthReport,
+  type SourceFetchResult,
+} from '../src/sources/health';
+import {
+  loadSourceRegistry,
+  loadSourceThresholds,
+  type SourceDefinition,
+} from '../src/sources/registry';
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const GEMINI_MODEL = 'gemini-3-flash-preview';
-const GEMINI_API_URL = `https://aiplatform.googleapis.com/v1/publishers/google/models/${GEMINI_MODEL}:generateContent`;
-const OPENAI_DEFAULT_API_BASE = 'https://api.openai.com/v1';
-const OPENAI_DEFAULT_MODEL = 'gpt-4o-mini';
 const FEED_FETCH_TIMEOUT_MS = 15_000;
 const FEED_CONCURRENCY = 10;
-const GEMINI_BATCH_SIZE = 10;
-const MAX_CONCURRENT_GEMINI = 2;
+const MODEL_BATCH_SIZE = 10;
+const MAX_CONCURRENT_MODEL_CALLS = 2;
 
-// 90 RSS feeds from Hacker News Popularity Contest 2025 (curated by Karpathy)
-const RSS_FEEDS: Array<{ name: string; xmlUrl: string; htmlUrl: string }> = [
-  { name: "simonwillison.net", xmlUrl: "https://simonwillison.net/atom/everything/", htmlUrl: "https://simonwillison.net" },
-  { name: "jeffgeerling.com", xmlUrl: "https://www.jeffgeerling.com/blog.xml", htmlUrl: "https://jeffgeerling.com" },
-  { name: "seangoedecke.com", xmlUrl: "https://www.seangoedecke.com/rss.xml", htmlUrl: "https://seangoedecke.com" },
-  { name: "krebsonsecurity.com", xmlUrl: "https://krebsonsecurity.com/feed/", htmlUrl: "https://krebsonsecurity.com" },
-  { name: "daringfireball.net", xmlUrl: "https://daringfireball.net/feeds/main", htmlUrl: "https://daringfireball.net" },
-  { name: "ericmigi.com", xmlUrl: "https://ericmigi.com/rss.xml", htmlUrl: "https://ericmigi.com" },
-  { name: "antirez.com", xmlUrl: "http://antirez.com/rss", htmlUrl: "http://antirez.com" },
-  { name: "idiallo.com", xmlUrl: "https://idiallo.com/feed.rss", htmlUrl: "https://idiallo.com" },
-  { name: "maurycyz.com", xmlUrl: "https://maurycyz.com/index.xml", htmlUrl: "https://maurycyz.com" },
-  { name: "pluralistic.net", xmlUrl: "https://pluralistic.net/feed/", htmlUrl: "https://pluralistic.net" },
-  { name: "shkspr.mobi", xmlUrl: "https://shkspr.mobi/blog/feed/", htmlUrl: "https://shkspr.mobi" },
-  { name: "lcamtuf.substack.com", xmlUrl: "https://lcamtuf.substack.com/feed", htmlUrl: "https://lcamtuf.substack.com" },
-  { name: "mitchellh.com", xmlUrl: "https://mitchellh.com/feed.xml", htmlUrl: "https://mitchellh.com" },
-  { name: "dynomight.net", xmlUrl: "https://dynomight.net/feed.xml", htmlUrl: "https://dynomight.net" },
-  { name: "utcc.utoronto.ca/~cks", xmlUrl: "https://utcc.utoronto.ca/~cks/space/blog/?atom", htmlUrl: "https://utcc.utoronto.ca/~cks" },
-  { name: "xeiaso.net", xmlUrl: "https://xeiaso.net/blog.rss", htmlUrl: "https://xeiaso.net" },
-  { name: "devblogs.microsoft.com/oldnewthing", xmlUrl: "https://devblogs.microsoft.com/oldnewthing/feed", htmlUrl: "https://devblogs.microsoft.com/oldnewthing" },
-  { name: "righto.com", xmlUrl: "https://www.righto.com/feeds/posts/default", htmlUrl: "https://righto.com" },
-  { name: "lucumr.pocoo.org", xmlUrl: "https://lucumr.pocoo.org/feed.atom", htmlUrl: "https://lucumr.pocoo.org" },
-  { name: "skyfall.dev", xmlUrl: "https://skyfall.dev/rss.xml", htmlUrl: "https://skyfall.dev" },
-  { name: "garymarcus.substack.com", xmlUrl: "https://garymarcus.substack.com/feed", htmlUrl: "https://garymarcus.substack.com" },
-  { name: "rachelbythebay.com", xmlUrl: "https://rachelbythebay.com/w/atom.xml", htmlUrl: "https://rachelbythebay.com" },
-  { name: "overreacted.io", xmlUrl: "https://overreacted.io/rss.xml", htmlUrl: "https://overreacted.io" },
-  { name: "timsh.org", xmlUrl: "https://timsh.org/rss/", htmlUrl: "https://timsh.org" },
-  { name: "johndcook.com", xmlUrl: "https://www.johndcook.com/blog/feed/", htmlUrl: "https://johndcook.com" },
-  { name: "gilesthomas.com", xmlUrl: "https://gilesthomas.com/feed/rss.xml", htmlUrl: "https://gilesthomas.com" },
-  { name: "matklad.github.io", xmlUrl: "https://matklad.github.io/feed.xml", htmlUrl: "https://matklad.github.io" },
-  { name: "derekthompson.org", xmlUrl: "https://www.theatlantic.com/feed/author/derek-thompson/", htmlUrl: "https://derekthompson.org" },
-  { name: "evanhahn.com", xmlUrl: "https://evanhahn.com/feed.xml", htmlUrl: "https://evanhahn.com" },
-  { name: "terriblesoftware.org", xmlUrl: "https://terriblesoftware.org/feed/", htmlUrl: "https://terriblesoftware.org" },
-  { name: "rakhim.exotext.com", xmlUrl: "https://rakhim.exotext.com/rss.xml", htmlUrl: "https://rakhim.exotext.com" },
-  { name: "joanwestenberg.com", xmlUrl: "https://joanwestenberg.com/rss", htmlUrl: "https://joanwestenberg.com" },
-  { name: "xania.org", xmlUrl: "https://xania.org/feed", htmlUrl: "https://xania.org" },
-  { name: "micahflee.com", xmlUrl: "https://micahflee.com/feed/", htmlUrl: "https://micahflee.com" },
-  { name: "nesbitt.io", xmlUrl: "https://nesbitt.io/feed.xml", htmlUrl: "https://nesbitt.io" },
-  { name: "construction-physics.com", xmlUrl: "https://www.construction-physics.com/feed", htmlUrl: "https://construction-physics.com" },
-  { name: "tedium.co", xmlUrl: "https://feed.tedium.co/", htmlUrl: "https://tedium.co" },
-  { name: "susam.net", xmlUrl: "https://susam.net/feed.xml", htmlUrl: "https://susam.net" },
-  { name: "entropicthoughts.com", xmlUrl: "https://entropicthoughts.com/feed.xml", htmlUrl: "https://entropicthoughts.com" },
-  { name: "buttondown.com/hillelwayne", xmlUrl: "https://buttondown.com/hillelwayne/rss", htmlUrl: "https://buttondown.com/hillelwayne" },
-  { name: "dwarkesh.com", xmlUrl: "https://www.dwarkeshpatel.com/feed", htmlUrl: "https://dwarkesh.com" },
-  { name: "borretti.me", xmlUrl: "https://borretti.me/feed.xml", htmlUrl: "https://borretti.me" },
-  { name: "wheresyoured.at", xmlUrl: "https://www.wheresyoured.at/rss/", htmlUrl: "https://wheresyoured.at" },
-  { name: "jayd.ml", xmlUrl: "https://jayd.ml/feed.xml", htmlUrl: "https://jayd.ml" },
-  { name: "minimaxir.com", xmlUrl: "https://minimaxir.com/index.xml", htmlUrl: "https://minimaxir.com" },
-  { name: "geohot.github.io", xmlUrl: "https://geohot.github.io/blog/feed.xml", htmlUrl: "https://geohot.github.io" },
-  { name: "paulgraham.com", xmlUrl: "http://www.aaronsw.com/2002/feeds/pgessays.rss", htmlUrl: "https://paulgraham.com" },
-  { name: "filfre.net", xmlUrl: "https://www.filfre.net/feed/", htmlUrl: "https://filfre.net" },
-  { name: "blog.jim-nielsen.com", xmlUrl: "https://blog.jim-nielsen.com/feed.xml", htmlUrl: "https://blog.jim-nielsen.com" },
-  { name: "dfarq.homeip.net", xmlUrl: "https://dfarq.homeip.net/feed/", htmlUrl: "https://dfarq.homeip.net" },
-  { name: "jyn.dev", xmlUrl: "https://jyn.dev/atom.xml", htmlUrl: "https://jyn.dev" },
-  { name: "geoffreylitt.com", xmlUrl: "https://www.geoffreylitt.com/feed.xml", htmlUrl: "https://geoffreylitt.com" },
-  { name: "downtowndougbrown.com", xmlUrl: "https://www.downtowndougbrown.com/feed/", htmlUrl: "https://downtowndougbrown.com" },
-  { name: "brutecat.com", xmlUrl: "https://brutecat.com/rss.xml", htmlUrl: "https://brutecat.com" },
-  { name: "eli.thegreenplace.net", xmlUrl: "https://eli.thegreenplace.net/feeds/all.atom.xml", htmlUrl: "https://eli.thegreenplace.net" },
-  { name: "abortretry.fail", xmlUrl: "https://www.abortretry.fail/feed", htmlUrl: "https://abortretry.fail" },
-  { name: "fabiensanglard.net", xmlUrl: "https://fabiensanglard.net/rss.xml", htmlUrl: "https://fabiensanglard.net" },
-  { name: "oldvcr.blogspot.com", xmlUrl: "https://oldvcr.blogspot.com/feeds/posts/default", htmlUrl: "https://oldvcr.blogspot.com" },
-  { name: "bogdanthegeek.github.io", xmlUrl: "https://bogdanthegeek.github.io/blog/index.xml", htmlUrl: "https://bogdanthegeek.github.io" },
-  { name: "hugotunius.se", xmlUrl: "https://hugotunius.se/feed.xml", htmlUrl: "https://hugotunius.se" },
-  { name: "gwern.net", xmlUrl: "https://gwern.substack.com/feed", htmlUrl: "https://gwern.net" },
-  { name: "berthub.eu", xmlUrl: "https://berthub.eu/articles/index.xml", htmlUrl: "https://berthub.eu" },
-  { name: "chadnauseam.com", xmlUrl: "https://chadnauseam.com/rss.xml", htmlUrl: "https://chadnauseam.com" },
-  { name: "simone.org", xmlUrl: "https://simone.org/feed/", htmlUrl: "https://simone.org" },
-  { name: "it-notes.dragas.net", xmlUrl: "https://it-notes.dragas.net/feed/", htmlUrl: "https://it-notes.dragas.net" },
-  { name: "beej.us", xmlUrl: "https://beej.us/blog/rss.xml", htmlUrl: "https://beej.us" },
-  { name: "hey.paris", xmlUrl: "https://hey.paris/index.xml", htmlUrl: "https://hey.paris" },
-  { name: "danielwirtz.com", xmlUrl: "https://danielwirtz.com/rss.xml", htmlUrl: "https://danielwirtz.com" },
-  { name: "matduggan.com", xmlUrl: "https://matduggan.com/rss/", htmlUrl: "https://matduggan.com" },
-  { name: "refactoringenglish.com", xmlUrl: "https://refactoringenglish.com/index.xml", htmlUrl: "https://refactoringenglish.com" },
-  { name: "worksonmymachine.substack.com", xmlUrl: "https://worksonmymachine.substack.com/feed", htmlUrl: "https://worksonmymachine.substack.com" },
-  { name: "philiplaine.com", xmlUrl: "https://philiplaine.com/index.xml", htmlUrl: "https://philiplaine.com" },
-  { name: "steveblank.com", xmlUrl: "https://steveblank.com/feed/", htmlUrl: "https://steveblank.com" },
-  { name: "bernsteinbear.com", xmlUrl: "https://bernsteinbear.com/feed.xml", htmlUrl: "https://bernsteinbear.com" },
-  { name: "danieldelaney.net", xmlUrl: "https://danieldelaney.net/feed", htmlUrl: "https://danieldelaney.net" },
-  { name: "troyhunt.com", xmlUrl: "https://www.troyhunt.com/rss/", htmlUrl: "https://troyhunt.com" },
-  { name: "herman.bearblog.dev", xmlUrl: "https://herman.bearblog.dev/feed/", htmlUrl: "https://herman.bearblog.dev" },
-  { name: "tomrenner.com", xmlUrl: "https://tomrenner.com/index.xml", htmlUrl: "https://tomrenner.com" },
-  { name: "blog.pixelmelt.dev", xmlUrl: "https://blog.pixelmelt.dev/rss/", htmlUrl: "https://blog.pixelmelt.dev" },
-  { name: "martinalderson.com", xmlUrl: "https://martinalderson.com/feed.xml", htmlUrl: "https://martinalderson.com" },
-  { name: "danielchasehooper.com", xmlUrl: "https://danielchasehooper.com/feed.xml", htmlUrl: "https://danielchasehooper.com" },
-  { name: "chiark.greenend.org.uk/~sgtatham", xmlUrl: "https://www.chiark.greenend.org.uk/~sgtatham/quasiblog/feed.xml", htmlUrl: "https://chiark.greenend.org.uk/~sgtatham" },
-  { name: "grantslatton.com", xmlUrl: "https://grantslatton.com/rss.xml", htmlUrl: "https://grantslatton.com" },
-  { name: "experimental-history.com", xmlUrl: "https://www.experimental-history.com/feed", htmlUrl: "https://experimental-history.com" },
-  { name: "anildash.com", xmlUrl: "https://anildash.com/feed.xml", htmlUrl: "https://anildash.com" },
-  { name: "aresluna.org", xmlUrl: "https://aresluna.org/main.rss", htmlUrl: "https://aresluna.org" },
-  { name: "michael.stapelberg.ch", xmlUrl: "https://michael.stapelberg.ch/feed.xml", htmlUrl: "https://michael.stapelberg.ch" },
-  { name: "miguelgrinberg.com", xmlUrl: "https://blog.miguelgrinberg.com/feed", htmlUrl: "https://miguelgrinberg.com" },
-  { name: "keygen.sh", xmlUrl: "https://keygen.sh/blog/feed.xml", htmlUrl: "https://keygen.sh" },
-  { name: "mjg59.dreamwidth.org", xmlUrl: "https://mjg59.dreamwidth.org/data/rss", htmlUrl: "https://mjg59.dreamwidth.org" },
-  { name: "computer.rip", xmlUrl: "https://computer.rip/rss.xml", htmlUrl: "https://computer.rip" },
-  { name: "tedunangst.com", xmlUrl: "https://www.tedunangst.com/flak/rss", htmlUrl: "https://tedunangst.com" },
-];
 
 // ============================================================================
 // Types
 // ============================================================================
-
-type CategoryId = 'ai-ml' | 'security' | 'engineering' | 'tools' | 'opinion' | 'other';
 
 const CATEGORY_META: Record<CategoryId, { emoji: string; label: string }> = {
   'ai-ml':       { emoji: '🤖', label: 'AI / ML' },
@@ -153,6 +57,7 @@ interface Article {
   link: string;
   pubDate: Date;
   description: string;
+  sourceId: string;
   sourceName: string;
   sourceUrl: string;
 }
@@ -171,73 +76,12 @@ interface ScoredArticle extends Article {
   reason: string;
 }
 
-interface GeminiScoringResult {
-  results: Array<{
-    index: number;
-    relevance: number;
-    quality: number;
-    timeliness: number;
-    category: string;
-    keywords: string[];
-  }>;
-}
-
-interface GeminiSummaryResult {
-  results: Array<{
-    index: number;
-    titleZh: string;
-    summary: string;
-    reason: string;
-  }>;
-}
-
-interface AIClient {
-  call(prompt: string): Promise<string>;
-}
+type AIClient = OpenAICompatibleClient;
 
 // ============================================================================
 // RSS/Atom Parsing (using Bun's built-in HTMLRewriter or manual XML parsing)
 // ============================================================================
 
-function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, '')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
-    .trim();
-}
-
-function extractCDATA(text: string): string {
-  const cdataMatch = text.match(/<!\[CDATA\[([\s\S]*?)\]\]>/);
-  return cdataMatch ? cdataMatch[1] : text;
-}
-
-function getTagContent(xml: string, tagName: string): string {
-  // Handle namespaced and non-namespaced tags
-  const patterns = [
-    new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)</${tagName}>`, 'i'),
-    new RegExp(`<${tagName}[^>]*/>`, 'i'), // self-closing
-  ];
-  
-  for (const pattern of patterns) {
-    const match = xml.match(pattern);
-    if (match?.[1]) {
-      return extractCDATA(match[1]).trim();
-    }
-  }
-  return '';
-}
-
-function getAttrValue(xml: string, tagName: string, attrName: string): string {
-  const pattern = new RegExp(`<${tagName}[^>]*\\s${attrName}=["']([^"']*)["'][^>]*/?>`, 'i');
-  const match = xml.match(pattern);
-  return match?.[1] || '';
-}
 
 function parseDate(dateStr: string): Date | null {
   if (!dateStr) return null;
@@ -256,73 +100,21 @@ function parseDate(dateStr: string): Date | null {
   return null;
 }
 
-function parseRSSItems(xml: string): Array<{ title: string; link: string; pubDate: string; description: string }> {
-  const items: Array<{ title: string; link: string; pubDate: string; description: string }> = [];
-  
-  // Detect format: Atom vs RSS
-  const isAtom = xml.includes('<feed') && xml.includes('xmlns="http://www.w3.org/2005/Atom"') || xml.includes('<feed ');
-  
-  if (isAtom) {
-    // Atom format: <entry>
-    const entryPattern = /<entry[\s>]([\s\S]*?)<\/entry>/gi;
-    let entryMatch;
-    while ((entryMatch = entryPattern.exec(xml)) !== null) {
-      const entryXml = entryMatch[1];
-      const title = stripHtml(getTagContent(entryXml, 'title'));
-      
-      // Atom link: <link href="..." rel="alternate"/>
-      let link = getAttrValue(entryXml, 'link[^>]*rel="alternate"', 'href');
-      if (!link) {
-        link = getAttrValue(entryXml, 'link', 'href');
-      }
-      
-      const pubDate = getTagContent(entryXml, 'published') 
-        || getTagContent(entryXml, 'updated');
-      
-      const description = stripHtml(
-        getTagContent(entryXml, 'summary') 
-        || getTagContent(entryXml, 'content')
-      );
-      
-      if (title || link) {
-        items.push({ title, link, pubDate, description: description.slice(0, 500) });
-      }
-    }
-  } else {
-    // RSS format: <item>
-    const itemPattern = /<item[\s>]([\s\S]*?)<\/item>/gi;
-    let itemMatch;
-    while ((itemMatch = itemPattern.exec(xml)) !== null) {
-      const itemXml = itemMatch[1];
-      const title = stripHtml(getTagContent(itemXml, 'title'));
-      const link = getTagContent(itemXml, 'link') || getTagContent(itemXml, 'guid');
-      const pubDate = getTagContent(itemXml, 'pubDate') 
-        || getTagContent(itemXml, 'dc:date')
-        || getTagContent(itemXml, 'date');
-      const description = stripHtml(
-        getTagContent(itemXml, 'description') 
-        || getTagContent(itemXml, 'content:encoded')
-      );
-      
-      if (title || link) {
-        items.push({ title, link, pubDate, description: description.slice(0, 500) });
-      }
-    }
-  }
-  
-  return items;
-}
 
 // ============================================================================
 // Feed Fetching
 // ============================================================================
 
-async function fetchFeed(feed: { name: string; xmlUrl: string; htmlUrl: string }): Promise<Article[]> {
+interface FeedFetchOutcome {
+  articles: Article[];
+  result: SourceFetchResult;
+}
+
+async function fetchFeed(source: SourceDefinition): Promise<FeedFetchOutcome> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FEED_FETCH_TIMEOUT_MS);
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FEED_FETCH_TIMEOUT_MS);
-    
-    const response = await fetch(feed.xmlUrl, {
+    const response = await fetch(source.feedUrl, {
       signal: controller.signal,
       headers: {
         'User-Agent': 'AI-Daily-Digest/1.0 (RSS Reader)',
@@ -330,197 +122,68 @@ async function fetchFeed(feed: { name: string; xmlUrl: string; htmlUrl: string }
       },
     });
     
-    clearTimeout(timeout);
-    
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
     
     const xml = await response.text();
-    const items = parseRSSItems(xml);
-    
-    return items.map(item => ({
+    const items = parseFeedItems(xml);
+    if (items.length === 0) throw new Error('feed contained no RSS/Atom items');
+    const articles = items.map((item) => ({
       title: item.title,
       link: item.link,
-      pubDate: parseDate(item.pubDate) || new Date(0),
+      pubDate: parseDate(item.publishedAt) || new Date(0),
       description: item.description,
-      sourceName: feed.name,
-      sourceUrl: feed.htmlUrl,
+      sourceId: source.id,
+      sourceName: source.name,
+      sourceUrl: source.siteUrl,
     }));
+    return {
+      articles,
+      result: { sourceId: source.id, status: 'success', articleCount: articles.length },
+    };
   } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    // Only log non-abort errors to reduce noise
-    if (!msg.includes('abort')) {
-      console.warn(`[digest] ✗ ${feed.name}: ${msg}`);
-    } else {
-      console.warn(`[digest] ✗ ${feed.name}: timeout`);
-    }
-    return [];
+    const rawMessage = error instanceof Error ? error.message : String(error);
+    const message = rawMessage.includes('abort') ? 'timeout' : rawMessage;
+    console.warn(`[digest] ✗ ${source.name}: ${message}`);
+    return {
+      articles: [],
+      result: { sourceId: source.id, status: 'failed', articleCount: 0, error: message },
+    };
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
-async function fetchAllFeeds(feeds: typeof RSS_FEEDS): Promise<Article[]> {
+async function fetchAllFeeds(sources: SourceDefinition[]): Promise<{
+  articles: Article[];
+  results: SourceFetchResult[];
+}> {
   const allArticles: Article[] = [];
+  const healthResults: SourceFetchResult[] = [];
   let successCount = 0;
   let failCount = 0;
   
-  for (let i = 0; i < feeds.length; i += FEED_CONCURRENCY) {
-    const batch = feeds.slice(i, i + FEED_CONCURRENCY);
-    const results = await Promise.allSettled(batch.map(fetchFeed));
+  for (let i = 0; i < sources.length; i += FEED_CONCURRENCY) {
+    const batch = sources.slice(i, i + FEED_CONCURRENCY);
+    const outcomes = await Promise.all(batch.map(fetchFeed));
     
-    for (const result of results) {
-      if (result.status === 'fulfilled' && result.value.length > 0) {
-        allArticles.push(...result.value);
+    for (const outcome of outcomes) {
+      healthResults.push(outcome.result);
+      if (outcome.result.status === 'success') {
+        allArticles.push(...outcome.articles);
         successCount++;
       } else {
         failCount++;
       }
     }
     
-    const progress = Math.min(i + FEED_CONCURRENCY, feeds.length);
-    console.log(`[digest] Progress: ${progress}/${feeds.length} feeds processed (${successCount} ok, ${failCount} failed)`);
+    const progress = Math.min(i + FEED_CONCURRENCY, sources.length);
+    console.log(`[digest] Progress: ${progress}/${sources.length} feeds processed (${successCount} ok, ${failCount} failed)`);
   }
   
   console.log(`[digest] Fetched ${allArticles.length} articles from ${successCount} feeds (${failCount} failed)`);
-  return allArticles;
-}
-
-// ============================================================================
-// AI Providers (Gemini + OpenAI-compatible fallback)
-// ============================================================================
-
-async function callGemini(prompt: string, apiKey: string): Promise<string> {
-  const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.3,
-        topP: 0.8,
-      },
-    }),
-  });
-  
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => 'Unknown error');
-    throw new Error(`Gemini API error (${response.status}): ${errorText}`);
-  }
-  
-  const data = await response.json() as {
-    candidates?: Array<{
-      content?: { parts?: Array<{ text?: string }> };
-    }>;
-  };
-  
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-}
-
-async function callOpenAICompatible(
-  prompt: string,
-  apiKey: string,
-  apiBase: string,
-  model: string
-): Promise<string> {
-  const normalizedBase = apiBase.replace(/\/+$/, '');
-  const response = await fetch(`${normalizedBase}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3,
-      top_p: 0.8,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => 'Unknown error');
-    throw new Error(`OpenAI-compatible API error (${response.status}): ${errorText}`);
-  }
-
-  const data = await response.json() as {
-    choices?: Array<{
-      message?: {
-        content?: string | Array<{ type?: string; text?: string }>;
-      };
-    }>;
-  };
-
-  const content = data.choices?.[0]?.message?.content;
-  if (typeof content === 'string') return content;
-  if (Array.isArray(content)) {
-    return content
-      .filter(item => item.type === 'text' && typeof item.text === 'string')
-      .map(item => item.text)
-      .join('\n');
-  }
-  return '';
-}
-
-function inferOpenAIModel(apiBase: string): string {
-  const base = apiBase.toLowerCase();
-  if (base.includes('deepseek')) return 'deepseek-chat';
-  return OPENAI_DEFAULT_MODEL;
-}
-
-function createAIClient(config: {
-  geminiApiKey?: string;
-  openaiApiKey?: string;
-  openaiApiBase?: string;
-  openaiModel?: string;
-}): AIClient {
-  const state = {
-    geminiApiKey: config.geminiApiKey?.trim() || '',
-    openaiApiKey: config.openaiApiKey?.trim() || '',
-    openaiApiBase: (config.openaiApiBase?.trim() || OPENAI_DEFAULT_API_BASE).replace(/\/+$/, ''),
-    openaiModel: config.openaiModel?.trim() || '',
-    geminiEnabled: Boolean(config.geminiApiKey?.trim()),
-    fallbackLogged: false,
-  };
-
-  if (!state.openaiModel) {
-    state.openaiModel = inferOpenAIModel(state.openaiApiBase);
-  }
-
-  return {
-    async call(prompt: string): Promise<string> {
-      if (state.geminiEnabled && state.geminiApiKey) {
-        try {
-          return await callGemini(prompt, state.geminiApiKey);
-        } catch (error) {
-          if (state.openaiApiKey) {
-            if (!state.fallbackLogged) {
-              const reason = error instanceof Error ? error.message : String(error);
-              console.warn(`[digest] Gemini failed, switching to OpenAI-compatible fallback (${state.openaiApiBase}, model=${state.openaiModel}). Reason: ${reason}`);
-              state.fallbackLogged = true;
-            }
-            state.geminiEnabled = false;
-            return callOpenAICompatible(prompt, state.openaiApiKey, state.openaiApiBase, state.openaiModel);
-          }
-          throw error;
-        }
-      }
-
-      if (state.openaiApiKey) {
-        return callOpenAICompatible(prompt, state.openaiApiKey, state.openaiApiBase, state.openaiModel);
-      }
-
-      throw new Error('No AI API key configured. Set GEMINI_API_KEY and/or OPENAI_API_KEY.');
-    },
-  };
-}
-
-function parseJsonResponse<T>(text: string): T {
-  let jsonText = text.trim();
-  // Strip markdown code blocks if present
-  if (jsonText.startsWith('```')) {
-    jsonText = jsonText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
-  }
-  return JSON.parse(jsonText) as T;
+  return { articles: allArticles, results: healthResults };
 }
 
 // ============================================================================
@@ -600,45 +263,28 @@ async function scoreArticlesWithAI(
   }));
   
   const batches: typeof indexed[] = [];
-  for (let i = 0; i < indexed.length; i += GEMINI_BATCH_SIZE) {
-    batches.push(indexed.slice(i, i + GEMINI_BATCH_SIZE));
+  for (let i = 0; i < indexed.length; i += MODEL_BATCH_SIZE) {
+    batches.push(indexed.slice(i, i + MODEL_BATCH_SIZE));
   }
   
   console.log(`[digest] AI scoring: ${articles.length} articles in ${batches.length} batches`);
   
-  const validCategories = new Set<string>(['ai-ml', 'security', 'engineering', 'tools', 'opinion', 'other']);
-  
-  for (let i = 0; i < batches.length; i += MAX_CONCURRENT_GEMINI) {
-    const batchGroup = batches.slice(i, i + MAX_CONCURRENT_GEMINI);
+  for (let i = 0; i < batches.length; i += MAX_CONCURRENT_MODEL_CALLS) {
+    const batchGroup = batches.slice(i, i + MAX_CONCURRENT_MODEL_CALLS);
     const promises = batchGroup.map(async (batch) => {
-      try {
-        const prompt = buildScoringPrompt(batch);
-        const responseText = await aiClient.call(prompt);
-        const parsed = parseJsonResponse<GeminiScoringResult>(responseText);
-        
-        if (parsed.results && Array.isArray(parsed.results)) {
-          for (const result of parsed.results) {
-            const clamp = (v: number) => Math.min(10, Math.max(1, Math.round(v)));
-            const cat = (validCategories.has(result.category) ? result.category : 'other') as CategoryId;
-            allScores.set(result.index, {
-              relevance: clamp(result.relevance),
-              quality: clamp(result.quality),
-              timeliness: clamp(result.timeliness),
-              category: cat,
-              keywords: Array.isArray(result.keywords) ? result.keywords.slice(0, 4) : [],
-            });
-          }
-        }
-      } catch (error) {
-        console.warn(`[digest] Scoring batch failed: ${error instanceof Error ? error.message : String(error)}`);
-        for (const item of batch) {
-          allScores.set(item.index, { relevance: 5, quality: 5, timeliness: 5, category: 'other', keywords: [] });
-        }
+      const prompt = buildScoringPrompt(batch);
+      const responseText = await aiClient.call(prompt);
+      const results = validateScoringOutput(
+        responseText,
+        batch.map((item) => item.index),
+      );
+      for (const result of results) {
+        allScores.set(result.index, result);
       }
     });
     
     await Promise.all(promises);
-    console.log(`[digest] Scoring progress: ${Math.min(i + MAX_CONCURRENT_GEMINI, batches.length)}/${batches.length} batches`);
+    console.log(`[digest] Scoring progress: ${Math.min(i + MAX_CONCURRENT_MODEL_CALLS, batches.length)}/${batches.length} batches`);
   }
   
   return allScores;
@@ -711,39 +357,32 @@ async function summarizeArticles(
   }));
   
   const batches: typeof indexed[] = [];
-  for (let i = 0; i < indexed.length; i += GEMINI_BATCH_SIZE) {
-    batches.push(indexed.slice(i, i + GEMINI_BATCH_SIZE));
+  for (let i = 0; i < indexed.length; i += MODEL_BATCH_SIZE) {
+    batches.push(indexed.slice(i, i + MODEL_BATCH_SIZE));
   }
   
   console.log(`[digest] Generating summaries for ${articles.length} articles in ${batches.length} batches`);
   
-  for (let i = 0; i < batches.length; i += MAX_CONCURRENT_GEMINI) {
-    const batchGroup = batches.slice(i, i + MAX_CONCURRENT_GEMINI);
+  for (let i = 0; i < batches.length; i += MAX_CONCURRENT_MODEL_CALLS) {
+    const batchGroup = batches.slice(i, i + MAX_CONCURRENT_MODEL_CALLS);
     const promises = batchGroup.map(async (batch) => {
-      try {
-        const prompt = buildSummaryPrompt(batch, lang);
-        const responseText = await aiClient.call(prompt);
-        const parsed = parseJsonResponse<GeminiSummaryResult>(responseText);
-        
-        if (parsed.results && Array.isArray(parsed.results)) {
-          for (const result of parsed.results) {
-            summaries.set(result.index, {
-              titleZh: result.titleZh || '',
-              summary: result.summary || '',
-              reason: result.reason || '',
-            });
-          }
-        }
-      } catch (error) {
-        console.warn(`[digest] Summary batch failed: ${error instanceof Error ? error.message : String(error)}`);
-        for (const item of batch) {
-          summaries.set(item.index, { titleZh: item.title, summary: item.title, reason: '' });
-        }
+      const prompt = buildSummaryPrompt(batch, lang);
+      const responseText = await aiClient.call(prompt);
+      const results = validateSummaryOutput(
+        responseText,
+        batch.map((item) => item.index),
+      );
+      for (const result of results) {
+        summaries.set(result.index, {
+          titleZh: result.titleLocalized,
+          summary: result.summary,
+          reason: result.reason,
+        });
       }
     });
     
     await Promise.all(promises);
-    console.log(`[digest] Summary progress: ${Math.min(i + MAX_CONCURRENT_GEMINI, batches.length)}/${batches.length} batches`);
+    console.log(`[digest] Summary progress: ${Math.min(i + MAX_CONCURRENT_MODEL_CALLS, batches.length)}/${batches.length} batches`);
   }
   
   return summaries;
@@ -776,13 +415,8 @@ ${articleList}
 
 直接返回纯文本总结，不要 JSON，不要 markdown 格式。`;
 
-  try {
-    const text = await aiClient.call(prompt);
-    return text.trim();
-  } catch (error) {
-    console.warn(`[digest] Highlights generation failed: ${error instanceof Error ? error.message : String(error)}`);
-    return '';
-  }
+  const text = await aiClient.call(prompt);
+  return text.trim();
 }
 
 // ============================================================================
@@ -1050,7 +684,7 @@ function markdownToHtmlFragment(md: string): string {
   html = html.replace(/<details>[\s\S]*?<\/details>/g, '');
   // Convert mermaid code blocks to plain text (RSS readers can't render mermaid)
   html = html.replace(/```mermaid\n([\s\S]*?)```/g, (_, content) => {
-    const lines = content.trim().split('\n').filter(l => !l.startsWith('pie ') && !l.startsWith('xychart') && !l.startsWith('    title') && !l.startsWith('    x-axis') && !l.startsWith('    y-axis'));
+    const lines = content.trim().split('\n').filter((line: string) => !line.startsWith('pie ') && !line.startsWith('xychart') && !line.startsWith('    title') && !line.startsWith('    x-axis') && !line.startsWith('    y-axis'));
     return `<pre style="color:#aaa;font-size:12px;">${lines.join('\n')}</pre>`;
   });
   // Convert plain code blocks
@@ -1148,14 +782,15 @@ Options:
   --top-n <n>       Number of top articles to include (default: 15)
   --lang <lang>     Summary language: zh or en (default: zh)
   --output <path>   Output file path (default: ./digest-YYYYMMDD.md)
-  --api-key <key>   Gemini/Vertex AI API key (or set GOOGLE_VERTEX_API_KEY / GEMINI_API_KEY)
   --help            Show this help
 
 Environment:
-  GEMINI_API_KEY   Optional but recommended. Get one at https://aistudio.google.com/apikey
-  OPENAI_API_KEY   Optional fallback key for OpenAI-compatible APIs
-  OPENAI_API_BASE  Optional fallback base URL (default: https://api.openai.com/v1)
-  OPENAI_MODEL     Optional fallback model (default: deepseek-chat for DeepSeek base, else gpt-4o-mini)
+  OPENAI_API_KEY                  Required provider key
+  OPENAI_BASE_URL                 Base URL (default: https://api.openai.com/v1)
+  OPENAI_MODEL                    Model (default: gpt-4o-mini)
+  OPENAI_API_STYLE                responses or chat_completions (default: responses)
+  OPENAI_RESPONSES_PATH           Responses endpoint path (default: /responses)
+  OPENAI_CHAT_COMPLETIONS_PATH    Chat Completions path (default: /chat/completions)
 
 Examples:
   bun scripts/digest.ts --hours 24 --top-n 10 --lang zh
@@ -1173,8 +808,6 @@ async function main(): Promise<void> {
   let lang: 'zh' | 'en' = 'zh';
   let outputPath = '';
   
-  let cliApiKey = '';
-
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]!;
     if (arg === '--hours' && args[i + 1]) {
@@ -1185,29 +818,18 @@ async function main(): Promise<void> {
       lang = args[++i] as 'zh' | 'en';
     } else if (arg === '--output' && args[i + 1]) {
       outputPath = args[++i]!;
-    } else if (arg === '--api-key' && args[i + 1]) {
-      cliApiKey = args[++i]!;
     }
   }
-  
-  await loadDotEnv();
 
-  const geminiApiKey = cliApiKey || process.env.GOOGLE_VERTEX_API_KEY || process.env.GEMINI_API_KEY;
-  const openaiApiKey = process.env.OPENAI_API_KEY;
-  const openaiApiBase = process.env.OPENAI_API_BASE;
-  const openaiModel = process.env.OPENAI_MODEL;
+  if (!Number.isInteger(hours) || hours < 1) throw new Error('--hours must be a positive integer');
+  if (!Number.isInteger(topN) || topN < 3) throw new Error('--top-n must be an integer of at least 3');
+  if (lang !== 'zh' && lang !== 'en') throw new Error('--lang must be zh or en');
 
-  if (!geminiApiKey && !openaiApiKey) {
-    console.error('[digest] Error: Missing API key. Set GOOGLE_VERTEX_API_KEY, GEMINI_API_KEY, and/or OPENAI_API_KEY.');
-    process.exit(1);
-  }
-
-  const aiClient = createAIClient({
-    geminiApiKey,
-    openaiApiKey,
-    openaiApiBase,
-    openaiModel,
-  });
+  const openAIConfig = loadOpenAICompatibleConfig();
+  const aiClient = createOpenAICompatibleClient(openAIConfig);
+  const sourceRegistry = await loadSourceRegistry();
+  const sourceThresholds = loadSourceThresholds();
+  const activeSources = sourceRegistry.sources.filter((source) => source.status === 'active');
   
   if (!outputPath) {
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
@@ -1219,21 +841,15 @@ async function main(): Promise<void> {
   console.log(`[digest] Top N: ${topN}`);
   console.log(`[digest] Language: ${lang}`);
   console.log(`[digest] Output: ${outputPath}`);
-  console.log(`[digest] AI provider: ${geminiApiKey ? `Vertex AI Gemini (${GEMINI_MODEL}) (primary)` : 'OpenAI-compatible (primary)'}`);
-  if (openaiApiKey) {
-    const resolvedBase = (openaiApiBase?.trim() || OPENAI_DEFAULT_API_BASE).replace(/\/+$/, '');
-    const resolvedModel = openaiModel?.trim() || inferOpenAIModel(resolvedBase);
-    console.log(`[digest] Fallback: ${resolvedBase} (model=${resolvedModel})`);
-  }
+  console.log(
+    `[digest] AI provider: OpenAI-compatible ${openAIConfig.apiStyle} ` +
+      `(${openAIConfig.baseUrl}, model=${openAIConfig.model})`,
+  );
   console.log('');
   
-  console.log(`[digest] Step 1/5: Fetching ${RSS_FEEDS.length} RSS feeds...`);
-  const allArticles = await fetchAllFeeds(RSS_FEEDS);
-  
-  if (allArticles.length === 0) {
-    console.error('[digest] Error: No articles fetched from any feed. Check network connection.');
-    process.exit(1);
-  }
+  console.log(`[digest] Step 1/5: Fetching ${activeSources.length} active RSS feeds...`);
+  const fetchOutcome = await fetchAllFeeds(activeSources);
+  const allArticles = fetchOutcome.articles;
   
   console.log(`[digest] Step 2/5: Filtering by time range (${hours} hours)...`);
   const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000);
@@ -1241,17 +857,27 @@ async function main(): Promise<void> {
   
   console.log(`[digest] Found ${recentArticles.length} articles within last ${hours} hours`);
   
-  if (recentArticles.length === 0) {
-    console.error(`[digest] Error: No articles found within the last ${hours} hours.`);
-    console.error(`[digest] Try increasing --hours (e.g., --hours 168 for one week)`);
-    process.exit(1);
-  }
+  const sourceHealth = buildSourceHealthReport(
+    sourceRegistry,
+    fetchOutcome.results,
+    recentArticles.length,
+    sourceThresholds,
+  );
+  const sourceHealthPath = join(dirname(outputPath), 'source-health.json');
+  await mkdir(dirname(sourceHealthPath), { recursive: true });
+  await writeFile(sourceHealthPath, `${JSON.stringify(sourceHealth, null, 2)}\n`);
+  console.log(
+    `[digest] Source health: ${sourceHealth.successfulSources}/${sourceHealth.activeSources} ` +
+      `active feeds (${(sourceHealth.coverageRatio * 100).toFixed(1)}%); report=${sourceHealthPath}`,
+  );
+  assertSourceCoverage(sourceHealth);
   
   console.log(`[digest] Step 3/5: AI scoring ${recentArticles.length} articles...`);
   const scores = await scoreArticlesWithAI(recentArticles, aiClient);
   
   const scoredArticles = recentArticles.map((article, index) => {
-    const score = scores.get(index) || { relevance: 5, quality: 5, timeliness: 5, category: 'other' as CategoryId, keywords: [] };
+    const score = scores.get(index);
+    if (!score) throw new Error(`validated scoring result missing index ${index}`);
     return {
       ...article,
       totalScore: score.relevance + score.quality + score.timeliness,
@@ -1269,12 +895,14 @@ async function main(): Promise<void> {
   const summaries = await summarizeArticles(indexedTopArticles, aiClient, lang);
   
   const finalArticles: ScoredArticle[] = topArticles.map((a, i) => {
-    const sm = summaries.get(i) || { titleZh: a.title, summary: a.description.slice(0, 200), reason: '' };
+    const sm = summaries.get(i);
+    if (!sm) throw new Error(`validated summary result missing index ${i}`);
     return {
       title: a.title,
       link: a.link,
       pubDate: a.pubDate,
       description: a.description,
+      sourceId: a.sourceId,
       sourceName: a.sourceName,
       sourceUrl: a.sourceUrl,
       score: a.totalScore,
@@ -1294,11 +922,39 @@ async function main(): Promise<void> {
   console.log(`[digest] Step 5/5: Generating today's highlights...`);
   const highlights = await generateHighlights(finalArticles, aiClient, lang);
   
-  const successfulSources = new Set(allArticles.map(a => a.sourceName));
-  
+  const digestReport: DigestReport = {
+    schemaVersion: DIGEST_SCHEMA_VERSION,
+    generatedAt: new Date().toISOString(),
+    language: lang,
+    highlights,
+    articles: finalArticles.map((article) => ({
+      title: article.title,
+      titleLocalized: article.titleZh,
+      url: article.link,
+      publishedAt: article.pubDate.toISOString(),
+      sourceId: article.sourceId,
+      sourceName: article.sourceName,
+      sourceUrl: article.sourceUrl,
+      category: article.category,
+      keywords: article.keywords,
+      summary: article.summary,
+      reason: article.reason,
+      scores: article.scoreBreakdown,
+    })),
+    stats: {
+      configuredSources: sourceHealth.configuredSources,
+      successfulSources: sourceHealth.successfulSources,
+      fetchedArticles: allArticles.length,
+      recentArticles: recentArticles.length,
+      selectedArticles: finalArticles.length,
+      timeRangeHours: hours,
+    },
+  };
+  assertPublishableDigestReport(digestReport);
+
   const report = generateDigestReport(finalArticles, highlights, {
-    totalFeeds: RSS_FEEDS.length,
-    successFeeds: successfulSources.size,
+    totalFeeds: sourceHealth.activeSources,
+    successFeeds: sourceHealth.successfulSources,
     totalArticles: allArticles.length,
     filteredArticles: recentArticles.length,
     hours,
@@ -1362,7 +1018,7 @@ async function main(): Promise<void> {
   console.log(`[digest] ✅ Done!`);
   console.log(`[digest] 📁 Report: ${outputPath}`);
   console.log(`[digest] 📡 RSS: ${rssPath}`);
-  console.log(`[digest] 📊 Stats: ${successfulSources.size} sources → ${allArticles.length} articles → ${recentArticles.length} recent → ${finalArticles.length} selected`);
+  console.log(`[digest] 📊 Stats: ${sourceHealth.successfulSources} sources → ${allArticles.length} articles → ${recentArticles.length} recent → ${finalArticles.length} selected`);
   
   if (finalArticles.length > 0) {
     console.log('');
@@ -1379,4 +1035,3 @@ await main().catch((err) => {
   console.error(`[digest] Fatal error: ${err instanceof Error ? err.message : String(err)}`);
   process.exit(1);
 });
-
