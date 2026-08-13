@@ -2,109 +2,149 @@ name: AI Daily Digest
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # 06:00 UTC = 14:00 CST
+    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       hours:
-        description: 'Time range in hours'
+        description: Time range in hours
         required: false
         default: '48'
         type: string
       top_n:
-        description: 'Number of top articles'
+        description: Number of top articles
         required: false
         default: '15'
         type: string
       lang:
-        description: 'Summary language (zh or en)'
+        description: Summary language (zh or en)
         required: false
         default: 'zh'
         type: string
-      retry_count:
-        description: 'Internal: retry attempt number (do not set manually)'
-        required: false
-        default: '0'
-        type: string
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
 
 jobs:
+  preflight:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.PRODUCTION_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      beijing_date: ${{ steps.date.outputs.beijing_date }}
+    steps:
+      - name: Check out the production source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Bun 1.3.11
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.3.11'
+
+      - name: Install frozen dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Validate production configuration before source and model work
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          OPENAI_API_STYLE: ${{ vars.OPENAI_API_STYLE }}
+          OPENAI_RESPONSES_PATH: ${{ vars.OPENAI_RESPONSES_PATH }}
+          OPENAI_CHAT_COMPLETIONS_PATH: ${{ vars.OPENAI_CHAT_COMPLETIONS_PATH }}
+          FEISHU_APP_ID: ${{ vars.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_FOLDER_TOKEN: ${{ secrets.FEISHU_FOLDER_TOKEN }}
+          FEISHU_RECEIVE_ID: ${{ vars.FEISHU_RECEIVE_ID }}
+          FEISHU_RECEIVE_ID_TYPE: ${{ vars.FEISHU_RECEIVE_ID_TYPE }}
+          PRODUCTION_ENABLED: ${{ vars.PRODUCTION_ENABLED }}
+        run: bun scripts/preflight-production.ts
+
+      - name: Resolve the Beijing publication date
+        id: date
+        env:
+          TZ: Asia/Shanghai
+        run: echo "beijing_date=$(date +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
   digest:
+    needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
+    concurrency:
+      group: ai-daily-digest-${{ needs.preflight.outputs.beijing_date }}
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v2
+      - name: Check out the production source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          bun-version: latest
+          fetch-depth: 0
 
-      - name: Run digest
+      - name: Set up Bun 1.3.11
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.3.11'
+
+      - name: Install frozen dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Configure pinned lark-cli bot profile
         env:
-          GOOGLE_VERTEX_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          HOURS="${{ github.event.inputs.hours || '48' }}"
-          TOP_N="${{ github.event.inputs.top_n || '15' }}"
-          LANG="${{ github.event.inputs.lang || 'zh' }}"
-          DATE=$(date +%Y%m%d)
-          bun scripts/digest.ts --hours "$HOURS" --top-n "$TOP_N" --lang "$LANG" --output "./docs/digest-${DATE}.md"
+          FEISHU_APP_ID: ${{ vars.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+        run: printf '%s' "$FEISHU_APP_SECRET" | ./node_modules/.bin/lark-cli profile add --name production --app-id "$FEISHU_APP_ID" --app-secret-stdin
 
-      - name: Copy feed.xml to docs
+      - name: Fetch sources, generate AI digest, strictly validate, and write Markdown/RSS
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          OPENAI_API_STYLE: ${{ vars.OPENAI_API_STYLE }}
+          OPENAI_RESPONSES_PATH: ${{ vars.OPENAI_RESPONSES_PATH }}
+          OPENAI_CHAT_COMPLETIONS_PATH: ${{ vars.OPENAI_CHAT_COMPLETIONS_PATH }}
+          BEIJING_DATE: ${{ needs.preflight.outputs.beijing_date }}
         run: |
-          cp docs/feed.xml docs/feed.xml 2>/dev/null || true
-          # feed.xml is already written to docs/ by the script
+          DATE_COMPACT="${BEIJING_DATE//-/}"
+          bun scripts/digest.ts \
+            --hours "${{ inputs.hours || '48' }}" \
+            --top-n "${{ inputs.top_n || '15' }}" \
+            --lang "${{ inputs.lang || 'zh' }}" \
+            --output "./docs/digest-${DATE_COMPACT}.md"
+          bash scripts/convert-md-to-html.sh "./docs/digest-${DATE_COMPACT}.md" > docs/index.html
+          echo "markdown_path=docs/digest-${DATE_COMPACT}.md" >> "$GITHUB_ENV"
 
-      - name: Build index.html from latest digest
-        run: |
-          LATEST_MD=$(ls -t docs/digest-*.md 2>/dev/null | head -1)
-          if [ -n "$LATEST_MD" ]; then
-            bash scripts/convert-md-to-html.sh "$LATEST_MD" > docs/index.html
-          fi
-
-      - name: Commit and push
+      - name: Commit and push the validated Git archive
+        env:
+          BEIJING_DATE: ${{ needs.preflight.outputs.beijing_date }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --quiet || git commit -m "digest: $(date +%Y-%m-%d) auto-generated"
-          git push
+          git add docs/
+          git diff --cached --quiet || git commit -m "digest: ${BEIJING_DATE} auto-generated"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
-  retry:
-    needs: digest
-    if: failure() && (github.event.inputs.retry_count || '0') != '2'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Calculate next retry
-        id: calc_retry
-        run: echo "next=$((${{ github.event.inputs.retry_count || '0' }} + 1))" >> "$GITHUB_OUTPUT"
-
-      - name: Retry workflow
+      - name: Create or update Feishu Docx, then send the interactive card
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEXT_RETRY: ${{ steps.calc_retry.outputs.next }}
-        run: |
-          echo "Retrying (attempt ${NEXT_RETRY}/2)..."
-          gh workflow run digest.yml \
-            --ref main \
-            -f hours="${{ github.event.inputs.hours || '48' }}" \
-            -f top_n="${{ github.event.inputs.top_n || '15' }}" \
-            -f lang="${{ github.event.inputs.lang || 'zh' }}" \
-            -f retry_count="${NEXT_RETRY}"
+          FEISHU_FOLDER_TOKEN: ${{ secrets.FEISHU_FOLDER_TOKEN }}
+          FEISHU_RECEIVE_ID: ${{ vars.FEISHU_RECEIVE_ID }}
+          FEISHU_RECEIVE_ID_TYPE: ${{ vars.FEISHU_RECEIVE_ID_TYPE }}
+        run: bun scripts/publish-feishu.ts --markdown "$markdown_path" --archive-pushed
 
-  deploy:
+  deploy-pages:
     needs: digest
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
           path: docs
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e

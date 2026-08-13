@@ -4,11 +4,15 @@
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.11",
+  "trustedDependencies": [
+    "@larksuite/cli"
+  ],
   "scripts": {
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "check:fork": "bun scripts/check-fork-contract.ts",
     "check:gate": "bun scripts/check-linear-workflow-runtime.ts",
+    "check:production": "bun scripts/check-production-workflow.ts",
     "check:secrets": "bun scripts/check-candidate-secrets.ts",
     "render:batch": "bun scripts/render-linear-workflow-batch.ts",
     "audit:sources": "bun scripts/audit-sources.ts",
@@ -17,5 +21,8 @@
   "devDependencies": {
     "@types/bun": "1.3.11",
     "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@larksuite/cli": "1.0.86"
   }
 }
