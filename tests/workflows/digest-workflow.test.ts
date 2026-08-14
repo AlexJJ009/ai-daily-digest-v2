@@ -10,6 +10,31 @@ describe('production workflow canaries', () => {
     expect(() => validateProductionWorkflow(valid)).not.toThrow();
   });
 
+  test('rejects Pages deployment or production HTML conversion', () => {
+    expect(() => validateProductionWorkflow(valid.replace(
+      'jobs:\n',
+      'jobs:\n  deploy-pages:\n    runs-on: ubuntu-latest\n    steps: []\n',
+    ))).toThrow('deploy-pages');
+    expect(() => validateProductionWorkflow(valid.replace(
+      '          echo "markdown_path=',
+      '          bash scripts/convert-md-to-html.sh digest.md > docs/index.html\n          echo "markdown_path=',
+    ))).toThrow('HTML conversion');
+  });
+
+  test('rejects removal of the dated Markdown archive commit', () => {
+    expect(() => validateProductionWorkflow(valid.replace(
+      '--output "./docs/digest-${DATE_COMPACT}.md"',
+      '--output "./digest.md"',
+    ))).toThrow('dated Markdown archive');
+    expect(() => validateProductionWorkflow(valid.replace('git add docs/', 'git add digest.md')))
+      .toThrow('Markdown/RSS archive');
+  });
+
+  test('rejects GitHub Release creation', () => {
+    expect(() => validateProductionWorkflow(`${valid}\n# gh release create daily`))
+      .toThrow('GitHub Releases');
+  });
+
   test('rejects a changed cron', () => {
     expect(() => validateProductionWorkflow(valid.replace("cron: '0 0 * * *'", "cron: '0 6 * * *'")))
       .toThrow('UTC 00:00');

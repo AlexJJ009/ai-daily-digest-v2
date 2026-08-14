@@ -27,15 +27,20 @@ describe('linear-workflow-runtime gate canaries', () => {
     expectRejected(mutated, 'pull_request trigger must be a mapping');
   });
 
+  test('fails when pull_request no longer covers main', () => {
+    const mutated = validWorkflow.replace('branches: [main, v2]', 'branches: [v2]');
+    expectRejected(mutated, 'pull_request trigger must cover main');
+  });
+
   test('fails when pull_request no longer covers v2', () => {
-    const mutated = validWorkflow.replace('branches: [v2]', 'branches: [main]');
+    const mutated = validWorkflow.replace('branches: [main, v2]', 'branches: [main]');
     expectRejected(mutated, 'pull_request trigger must cover v2');
   });
 
   test('fails when a narrow path filter is introduced', () => {
     const mutated = validWorkflow.replace(
-      '    branches: [v2]',
-      '    branches: [v2]\n    paths: [scripts/**]',
+      '    branches: [main, v2]',
+      '    branches: [main, v2]\n    paths: [scripts/**]',
     );
     expectRejected(mutated, 'pull_request trigger must not use path filters');
   });
