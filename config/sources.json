@@ -1,0 +1,741 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "simonwillison-net-1",
+      "name": "simonwillison.net",
+      "feedUrl": "https://simonwillison.net/atom/everything/",
+      "siteUrl": "https://simonwillison.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "jeffgeerling-com-2",
+      "name": "jeffgeerling.com",
+      "feedUrl": "https://www.jeffgeerling.com/blog.xml",
+      "siteUrl": "https://jeffgeerling.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "seangoedecke-com-3",
+      "name": "seangoedecke.com",
+      "feedUrl": "https://www.seangoedecke.com/rss.xml",
+      "siteUrl": "https://seangoedecke.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "krebsonsecurity-com-4",
+      "name": "krebsonsecurity.com",
+      "feedUrl": "https://krebsonsecurity.com/feed/",
+      "siteUrl": "https://krebsonsecurity.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "daringfireball-net-5",
+      "name": "daringfireball.net",
+      "feedUrl": "https://daringfireball.net/feeds/main",
+      "siteUrl": "https://daringfireball.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "ericmigi-com-6",
+      "name": "ericmigi.com",
+      "feedUrl": "https://ericmigi.com/rss.xml",
+      "siteUrl": "https://ericmigi.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "antirez-com-7",
+      "name": "antirez.com",
+      "feedUrl": "http://antirez.com/rss",
+      "siteUrl": "http://antirez.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "idiallo-com-8",
+      "name": "idiallo.com",
+      "feedUrl": "https://idiallo.com/feed.rss",
+      "siteUrl": "https://idiallo.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "maurycyz-com-9",
+      "name": "maurycyz.com",
+      "feedUrl": "https://maurycyz.com/index.xml",
+      "siteUrl": "https://maurycyz.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "pluralistic-net-10",
+      "name": "pluralistic.net",
+      "feedUrl": "https://pluralistic.net/feed/",
+      "siteUrl": "https://pluralistic.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "shkspr-mobi-11",
+      "name": "shkspr.mobi",
+      "feedUrl": "https://shkspr.mobi/blog/feed/",
+      "siteUrl": "https://shkspr.mobi",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "lcamtuf-substack-com-12",
+      "name": "lcamtuf.substack.com",
+      "feedUrl": "https://lcamtuf.substack.com/feed",
+      "siteUrl": "https://lcamtuf.substack.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "mitchellh-com-13",
+      "name": "mitchellh.com",
+      "feedUrl": "https://mitchellh.com/feed.xml",
+      "siteUrl": "https://mitchellh.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "dynomight-net-14",
+      "name": "dynomight.net",
+      "feedUrl": "https://dynomight.net/feed.xml",
+      "siteUrl": "https://dynomight.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "utcc-utoronto-ca-cks-15",
+      "name": "utcc.utoronto.ca/~cks",
+      "feedUrl": "https://utcc.utoronto.ca/~cks/space/blog/?atom",
+      "siteUrl": "https://utcc.utoronto.ca/~cks",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "xeiaso-net-16",
+      "name": "xeiaso.net",
+      "feedUrl": "https://xeiaso.net/blog.rss",
+      "siteUrl": "https://xeiaso.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "devblogs-microsoft-com-oldnewthing-17",
+      "name": "devblogs.microsoft.com/oldnewthing",
+      "feedUrl": "https://devblogs.microsoft.com/oldnewthing/feed",
+      "siteUrl": "https://devblogs.microsoft.com/oldnewthing",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "righto-com-18",
+      "name": "righto.com",
+      "feedUrl": "https://www.righto.com/feeds/posts/default",
+      "siteUrl": "https://righto.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "lucumr-pocoo-org-19",
+      "name": "lucumr.pocoo.org",
+      "feedUrl": "https://lucumr.pocoo.org/feed.atom",
+      "siteUrl": "https://lucumr.pocoo.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "skyfall-dev-20",
+      "name": "skyfall.dev",
+      "feedUrl": "https://skyfall.dev/rss.xml",
+      "siteUrl": "https://skyfall.dev",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "garymarcus-substack-com-21",
+      "name": "garymarcus.substack.com",
+      "feedUrl": "https://garymarcus.substack.com/feed",
+      "siteUrl": "https://garymarcus.substack.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "rachelbythebay-com-22",
+      "name": "rachelbythebay.com",
+      "feedUrl": "https://rachelbythebay.com/w/atom.xml",
+      "siteUrl": "https://rachelbythebay.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "overreacted-io-23",
+      "name": "overreacted.io",
+      "feedUrl": "https://overreacted.io/rss.xml",
+      "siteUrl": "https://overreacted.io",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "timsh-org-24",
+      "name": "timsh.org",
+      "feedUrl": "https://timsh.org/rss/",
+      "siteUrl": "https://timsh.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "johndcook-com-25",
+      "name": "johndcook.com",
+      "feedUrl": "https://www.johndcook.com/blog/feed/",
+      "siteUrl": "https://johndcook.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "gilesthomas-com-26",
+      "name": "gilesthomas.com",
+      "feedUrl": "https://gilesthomas.com/feed/rss.xml",
+      "siteUrl": "https://gilesthomas.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "matklad-github-io-27",
+      "name": "matklad.github.io",
+      "feedUrl": "https://matklad.github.io/feed.xml",
+      "siteUrl": "https://matklad.github.io",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "derekthompson-org-28",
+      "name": "derekthompson.org",
+      "feedUrl": "https://www.theatlantic.com/feed/author/derek-thompson/",
+      "siteUrl": "https://derekthompson.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "evanhahn-com-29",
+      "name": "evanhahn.com",
+      "feedUrl": "https://evanhahn.com/feed.xml",
+      "siteUrl": "https://evanhahn.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "terriblesoftware-org-30",
+      "name": "terriblesoftware.org",
+      "feedUrl": "https://terriblesoftware.org/feed/",
+      "siteUrl": "https://terriblesoftware.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "rakhim-exotext-com-31",
+      "name": "rakhim.exotext.com",
+      "feedUrl": "https://rakhim.exotext.com/rss.xml",
+      "siteUrl": "https://rakhim.exotext.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "joanwestenberg-com-32",
+      "name": "joanwestenberg.com",
+      "feedUrl": "https://www.joanwestenberg.com/feed",
+      "siteUrl": "https://joanwestenberg.com",
+      "status": "active",
+      "reason": "Active official feed; replaced the upstream /rss URL after the 2026-08-12 audit confirmed HTTP 404 and verified /feed as RSS."
+    },
+    {
+      "id": "xania-org-33",
+      "name": "xania.org",
+      "feedUrl": "https://xania.org/feed",
+      "siteUrl": "https://xania.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "micahflee-com-34",
+      "name": "micahflee.com",
+      "feedUrl": "https://micahflee.com/feed/",
+      "siteUrl": "https://micahflee.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "nesbitt-io-35",
+      "name": "nesbitt.io",
+      "feedUrl": "https://nesbitt.io/feed.xml",
+      "siteUrl": "https://nesbitt.io",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "construction-physics-com-36",
+      "name": "construction-physics.com",
+      "feedUrl": "https://www.construction-physics.com/feed",
+      "siteUrl": "https://construction-physics.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "tedium-co-37",
+      "name": "tedium.co",
+      "feedUrl": "https://feed.tedium.co/",
+      "siteUrl": "https://tedium.co",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "susam-net-38",
+      "name": "susam.net",
+      "feedUrl": "https://susam.net/feed.xml",
+      "siteUrl": "https://susam.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "entropicthoughts-com-39",
+      "name": "entropicthoughts.com",
+      "feedUrl": "https://entropicthoughts.com/feed.xml",
+      "siteUrl": "https://entropicthoughts.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "buttondown-com-hillelwayne-40",
+      "name": "buttondown.com/hillelwayne",
+      "feedUrl": "https://buttondown.com/hillelwayne/rss",
+      "siteUrl": "https://buttondown.com/hillelwayne",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "dwarkesh-com-41",
+      "name": "dwarkesh.com",
+      "feedUrl": "https://www.dwarkeshpatel.com/feed",
+      "siteUrl": "https://dwarkesh.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "borretti-me-42",
+      "name": "borretti.me",
+      "feedUrl": "https://borretti.me/feed.xml",
+      "siteUrl": "https://borretti.me",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "wheresyoured-at-43",
+      "name": "wheresyoured.at",
+      "feedUrl": "https://www.wheresyoured.at/rss/",
+      "siteUrl": "https://wheresyoured.at",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "jayd-ml-44",
+      "name": "jayd.ml",
+      "feedUrl": "https://jayd.ml/feed.xml",
+      "siteUrl": "https://jayd.ml",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "minimaxir-com-45",
+      "name": "minimaxir.com",
+      "feedUrl": "https://minimaxir.com/index.xml",
+      "siteUrl": "https://minimaxir.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "geohot-github-io-46",
+      "name": "geohot.github.io",
+      "feedUrl": "https://geohot.github.io/blog/feed.xml",
+      "siteUrl": "https://geohot.github.io",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "paulgraham-com-47",
+      "name": "paulgraham.com",
+      "feedUrl": "http://www.aaronsw.com/2002/feeds/pgessays.rss",
+      "siteUrl": "https://paulgraham.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "filfre-net-48",
+      "name": "filfre.net",
+      "feedUrl": "https://www.filfre.net/feed/",
+      "siteUrl": "https://filfre.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "blog-jim-nielsen-com-49",
+      "name": "blog.jim-nielsen.com",
+      "feedUrl": "https://blog.jim-nielsen.com/feed.xml",
+      "siteUrl": "https://blog.jim-nielsen.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "dfarq-homeip-net-50",
+      "name": "dfarq.homeip.net",
+      "feedUrl": "https://dfarq.homeip.net/feed/",
+      "siteUrl": "https://dfarq.homeip.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "jyn-dev-51",
+      "name": "jyn.dev",
+      "feedUrl": "https://jyn.dev/atom.xml",
+      "siteUrl": "https://jyn.dev",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "geoffreylitt-com-52",
+      "name": "geoffreylitt.com",
+      "feedUrl": "https://www.geoffreylitt.com/feed.xml",
+      "siteUrl": "https://geoffreylitt.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "downtowndougbrown-com-53",
+      "name": "downtowndougbrown.com",
+      "feedUrl": "https://www.downtowndougbrown.com/feed/",
+      "siteUrl": "https://downtowndougbrown.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "brutecat-com-54",
+      "name": "brutecat.com",
+      "feedUrl": "https://brutecat.com/rss.xml",
+      "siteUrl": "https://brutecat.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "eli-thegreenplace-net-55",
+      "name": "eli.thegreenplace.net",
+      "feedUrl": "https://eli.thegreenplace.net/feeds/all.atom.xml",
+      "siteUrl": "https://eli.thegreenplace.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "abortretry-fail-56",
+      "name": "abortretry.fail",
+      "feedUrl": "https://www.abortretry.fail/feed",
+      "siteUrl": "https://abortretry.fail",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "fabiensanglard-net-57",
+      "name": "fabiensanglard.net",
+      "feedUrl": "https://fabiensanglard.net/rss.xml",
+      "siteUrl": "https://fabiensanglard.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "oldvcr-blogspot-com-58",
+      "name": "oldvcr.blogspot.com",
+      "feedUrl": "https://oldvcr.blogspot.com/feeds/posts/default",
+      "siteUrl": "https://oldvcr.blogspot.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "bogdanthegeek-github-io-59",
+      "name": "bogdanthegeek.github.io",
+      "feedUrl": "https://bogdanthegeek.github.io/blog/index.xml",
+      "siteUrl": "https://bogdanthegeek.github.io",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "hugotunius-se-60",
+      "name": "hugotunius.se",
+      "feedUrl": "https://hugotunius.se/feed.xml",
+      "siteUrl": "https://hugotunius.se",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "gwern-net-61",
+      "name": "gwern.net",
+      "feedUrl": "https://gwern.substack.com/feed",
+      "siteUrl": "https://gwern.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "berthub-eu-62",
+      "name": "berthub.eu",
+      "feedUrl": "https://berthub.eu/articles/index.xml",
+      "siteUrl": "https://berthub.eu",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "chadnauseam-com-63",
+      "name": "chadnauseam.com",
+      "feedUrl": "https://chadnauseam.com/rss.xml",
+      "siteUrl": "https://chadnauseam.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "simone-org-64",
+      "name": "simone.org",
+      "feedUrl": "https://simone.org/feed/",
+      "siteUrl": "https://simone.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "it-notes-dragas-net-65",
+      "name": "it-notes.dragas.net",
+      "feedUrl": "https://it-notes.dragas.net/feed/",
+      "siteUrl": "https://it-notes.dragas.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "beej-us-66",
+      "name": "beej.us",
+      "feedUrl": "https://beej.us/blog/rss.xml",
+      "siteUrl": "https://beej.us",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "hey-paris-67",
+      "name": "hey.paris",
+      "feedUrl": "https://hey.paris/index.xml",
+      "siteUrl": "https://hey.paris",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "danielwirtz-com-68",
+      "name": "danielwirtz.com",
+      "feedUrl": "https://danielwirtz.com/rss.xml",
+      "siteUrl": "https://danielwirtz.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "matduggan-com-69",
+      "name": "matduggan.com",
+      "feedUrl": "https://matduggan.com/rss/",
+      "siteUrl": "https://matduggan.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "refactoringenglish-com-70",
+      "name": "refactoringenglish.com",
+      "feedUrl": "https://refactoringenglish.com/index.xml",
+      "siteUrl": "https://refactoringenglish.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "worksonmymachine-substack-com-71",
+      "name": "worksonmymachine.substack.com",
+      "feedUrl": "https://worksonmymachine.substack.com/feed",
+      "siteUrl": "https://worksonmymachine.substack.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "philiplaine-com-72",
+      "name": "philiplaine.com",
+      "feedUrl": "https://philiplaine.com/index.xml",
+      "siteUrl": "https://philiplaine.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "steveblank-com-73",
+      "name": "steveblank.com",
+      "feedUrl": "https://steveblank.com/feed/",
+      "siteUrl": "https://steveblank.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "bernsteinbear-com-74",
+      "name": "bernsteinbear.com",
+      "feedUrl": "https://bernsteinbear.com/feed.xml",
+      "siteUrl": "https://bernsteinbear.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "danieldelaney-net-75",
+      "name": "danieldelaney.net",
+      "feedUrl": "https://danieldelaney.net/feed",
+      "siteUrl": "https://danieldelaney.net",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "troyhunt-com-76",
+      "name": "troyhunt.com",
+      "feedUrl": "https://www.troyhunt.com/rss/",
+      "siteUrl": "https://troyhunt.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "herman-bearblog-dev-77",
+      "name": "herman.bearblog.dev",
+      "feedUrl": "https://herman.bearblog.dev/feed/",
+      "siteUrl": "https://herman.bearblog.dev",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "tomrenner-com-78",
+      "name": "tomrenner.com",
+      "feedUrl": "https://tomrenner.com/index.xml",
+      "siteUrl": "https://tomrenner.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "blog-pixelmelt-dev-79",
+      "name": "blog.pixelmelt.dev",
+      "feedUrl": "https://blog.pixelmelt.dev/rss/",
+      "siteUrl": "https://blog.pixelmelt.dev",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "martinalderson-com-80",
+      "name": "martinalderson.com",
+      "feedUrl": "https://martinalderson.com/feed.xml",
+      "siteUrl": "https://martinalderson.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "danielchasehooper-com-81",
+      "name": "danielchasehooper.com",
+      "feedUrl": "https://danielchasehooper.com/feed.xml",
+      "siteUrl": "https://danielchasehooper.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "chiark-greenend-org-uk-sgtatham-82",
+      "name": "chiark.greenend.org.uk/~sgtatham",
+      "feedUrl": "https://www.chiark.greenend.org.uk/~sgtatham/quasiblog/feed.xml",
+      "siteUrl": "https://chiark.greenend.org.uk/~sgtatham",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "grantslatton-com-83",
+      "name": "grantslatton.com",
+      "feedUrl": "https://grantslatton.com/rss.xml",
+      "siteUrl": "https://grantslatton.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "experimental-history-com-84",
+      "name": "experimental-history.com",
+      "feedUrl": "https://www.experimental-history.com/feed",
+      "siteUrl": "https://experimental-history.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "anildash-com-85",
+      "name": "anildash.com",
+      "feedUrl": "https://anildash.com/feed.xml",
+      "siteUrl": "https://anildash.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "aresluna-org-86",
+      "name": "aresluna.org",
+      "feedUrl": "https://aresluna.org/main.rss",
+      "siteUrl": "https://aresluna.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "michael-stapelberg-ch-87",
+      "name": "michael.stapelberg.ch",
+      "feedUrl": "https://michael.stapelberg.ch/feed.xml",
+      "siteUrl": "https://michael.stapelberg.ch",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "miguelgrinberg-com-88",
+      "name": "miguelgrinberg.com",
+      "feedUrl": "https://blog.miguelgrinberg.com/feed",
+      "siteUrl": "https://miguelgrinberg.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "keygen-sh-89",
+      "name": "keygen.sh",
+      "feedUrl": "https://keygen.sh/blog/feed.xml",
+      "siteUrl": "https://keygen.sh",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "mjg59-dreamwidth-org-90",
+      "name": "mjg59.dreamwidth.org",
+      "feedUrl": "https://mjg59.dreamwidth.org/data/rss",
+      "siteUrl": "https://mjg59.dreamwidth.org",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "computer-rip-91",
+      "name": "computer.rip",
+      "feedUrl": "https://computer.rip/rss.xml",
+      "siteUrl": "https://computer.rip",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "id": "tedunangst-com-92",
+      "name": "tedunangst.com",
+      "feedUrl": "https://www.tedunangst.com/flak/rss",
+      "siteUrl": "https://tedunangst.com",
+      "status": "active",
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    }
+  ]
+}

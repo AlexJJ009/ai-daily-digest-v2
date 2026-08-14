@@ -1,0 +1,12 @@
+AI Daily Digest V2
+
+This repository is a maintained derivative of AI Daily Digest by AllenX-Li:
+https://github.com/AllenX-Li/ai-daily-digest
+
+V2 maintenance and integration repository:
+https://github.com/AlexJJ009/ai-daily-digest-v2
+
+The original project is represented by the upstream Git history and remains
+available under the MIT License. V2 changes add a typed digest contract,
+OpenAI-compatible providers, strict output validation, and a configurable
+source registry. See README.md for the branch and synchronization policy.

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-12T08:00:00.000Z",
+  "language": "zh",
+  "highlights": "开源模型推理、系统可靠性与开发工具是今天的三个主要话题。",
+  "articles": [
+    {
+      "title": "Reliable inference systems",
+      "titleLocalized": "可靠的推理系统",
+      "url": "https://example.com/inference",
+      "publishedAt": "2026-08-12T05:00:00.000Z",
+      "sourceId": "example-engineering",
+      "sourceName": "Example Engineering",
+      "sourceUrl": "https://example.com",
+      "category": "engineering",
+      "keywords": ["inference", "reliability"],
+      "summary": "文章给出推理服务的分层降级方案，并用错误预算约束重试和回退。作者比较了同步与异步批处理的延迟边界。结论是先保证可观测性，再提高吞吐。",
+      "reason": "适合需要权衡推理吞吐与尾延迟的工程团队。",
+      "scores": { "relevance": 9, "quality": 8, "timeliness": 8 }
+    },
+    {
+      "title": "A small language model release",
+      "titleLocalized": "一个小语言模型的新版本",
+      "url": "https://example.org/model",
+      "publishedAt": "2026-08-12T04:00:00.000Z",
+      "sourceId": "example-ai",
+      "sourceName": "Example AI Lab",
+      "sourceUrl": "https://example.org",
+      "category": "ai-ml",
+      "keywords": ["SLM", "distillation"],
+      "summary": "新版本通过蒸馏改善代码生成，在固定显存预算下提高了准确率。评测同时报告速度和质量，没有只展示单一榜单。模型权重与推理脚本均已开放。",
+      "reason": "提供了小模型蒸馏和部署之间的可复用权衡。",
+      "scores": { "relevance": 8, "quality": 8, "timeliness": 9 }
+    },
+    {
+      "title": "Safer package updates",
+      "titleLocalized": "更安全的依赖更新",
+      "url": "https://example.net/packages",
+      "publishedAt": "2026-08-12T03:00:00.000Z",
+      "sourceId": "example-tools",
+      "sourceName": "Example Tools",
+      "sourceUrl": "https://example.net",
+      "category": "tools",
+      "keywords": ["dependencies", "supply-chain"],
+      "summary": "工具在升级前比较 lockfile 和产物差异，并把异常安装脚本列入审计摘要。默认策略优先阻断未知来源。文章还展示了如何在 CI 中复用同一检查。",
+      "reason": "能直接改善自动依赖更新的供应链安全。",
+      "scores": { "relevance": 8, "quality": 7, "timeliness": 8 }
+    }
+  ],
+  "stats": {
+    "configuredSources": 4,
+    "successfulSources": 3,
+    "fetchedArticles": 12,
+    "recentArticles": 8,
+    "selectedArticles": 3,
+    "timeRangeHours": 48
+  }
+}
