@@ -23,6 +23,14 @@ export function validateProductionWorkflow(source: string): void {
   objectAt(triggers.workflow_dispatch, 'workflow_dispatch trigger');
 
   const jobs = objectAt(workflow.jobs, 'jobs');
+  if ('deploy-pages' in jobs) throw new Error('production workflow must not contain a deploy-pages job');
+  if (/convert-md-to-html\.sh/.test(source)) throw new Error('production workflow must not invoke HTML conversion');
+  if (/actions\/(?:configure-pages|upload-pages-artifact|deploy-pages)@/.test(source) || /\bpages:\s*write\b/.test(source)) {
+    throw new Error('production workflow must not enable GitHub Pages');
+  }
+  if (/\bgh\s+release\b|actions\/create-release@|softprops\/action-gh-release@/.test(source)) {
+    throw new Error('production workflow must not create GitHub Releases');
+  }
   const preflight = objectAt(jobs.preflight, 'preflight job');
   const gate = String(preflight.if ?? '');
   if (!gate.includes("github.event_name == 'workflow_dispatch'") ||
@@ -53,7 +61,6 @@ export function validateProductionWorkflow(source: string): void {
   const digestSteps = arrayAt(digest.steps, 'digest steps').map((step) => objectAt(step, 'digest step'));
   const requiredOrder = [
     'bun scripts/digest.ts',
-    'convert-md-to-html.sh',
     'git push origin',
     'bun scripts/publish-feishu.ts',
   ];
@@ -62,6 +69,12 @@ export function validateProductionWorkflow(source: string): void {
     const index = source.indexOf(command);
     if (index <= previous) throw new Error(`production command is missing or out of order: ${command}`);
     previous = index;
+  }
+  if (!source.includes('--output "./docs/digest-${DATE_COMPACT}.md"')) {
+    throw new Error('production workflow must preserve the dated Markdown archive');
+  }
+  if (!source.includes('git add docs/')) {
+    throw new Error('production workflow must commit the Markdown/RSS archive');
   }
   if (!source.includes('@larksuite/cli') && !source.includes('./node_modules/.bin/lark-cli')) {
     throw new Error('workflow must use the pinned lark-cli dependency');

@@ -12,17 +12,17 @@ see [LICENSE](LICENSE) and [NOTICE](NOTICE).
 ## Fork and branch model
 
 - `upstream/main` tracks `AllenX-Li/ai-daily-digest`.
-- `origin/main` mirrors upstream history and does not carry V2 customization.
-- `origin/v2` is the long-lived integration branch for V2 changes.
+- `origin/main` is the sole production/default branch.
+- `origin/v2` is the long-lived integration branch for reviewed V2 changes.
 - Delivery work branches from a frozen `origin/v2` commit and returns through a
-  reviewed pull request. Delivery agents do not merge the PR or change the
-  GitHub default branch.
+  reviewed pull request. Reviewed `v2` trees are promoted to `main` through a
+  separate, pure promotion pull request; delivery agents do not merge either PR.
 
 The initial V2 base is
 `9f9f5cecdd76cb33087400ffd8004489801b6250`. To sync upstream, first fetch both
-remotes, update `origin/main` as a clean mirror, then integrate the selected
-upstream range into `v2` through a dedicated reviewed branch. Never force-push
-V2 customization onto `main`.
+remotes, integrate the selected upstream range into `v2` through a dedicated
+reviewed branch, then promote the unchanged reviewed tree into `main`. Never
+force-push V2 customization onto either protected branch.
 
 ## Runtime and dependencies
 
@@ -118,9 +118,14 @@ does not require the official OpenAI host or a Gemini key. Credential values
 remain GitHub Secrets. A preflight step validates every required name before
 source fetching or model calls.
 
-After strict digest validation produces Markdown, RSS, and Pages source, the DAG
-pushes those artifacts to Git before invoking the pinned official
+After strict digest validation produces a dated Markdown report and updates
+`docs/feed.xml`, the DAG pushes those public repository archives to Git before
+invoking the pinned official
 `@larksuite/cli@1.0.86` with bot identity. The publisher enumerates the dedicated
 folder directly, exactly matches `AI Daily Digest · YYYY-MM-DD` using the
 Asia/Shanghai date, creates or updates one Docx, and only then sends the linked
 interactive card. Multiple exact Docx matches fail closed.
+
+The production DAG does not generate new HTML, deploy GitHub Pages, or create
+daily GitHub Releases. Historical HTML and the legacy conversion helper remain
+in the repository as inherited artifacts but are not part of production.

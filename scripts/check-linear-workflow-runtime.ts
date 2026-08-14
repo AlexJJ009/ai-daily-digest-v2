@@ -69,8 +69,10 @@ export function validateLinearWorkflowRuntime(source: string): void {
   const triggers = objectAt(workflow.on, 'workflow triggers');
   const pullRequest = objectAt(triggers.pull_request, 'pull_request trigger');
   const branches = arrayAt(pullRequest.branches, 'pull_request branches');
-  if (!branches.includes('v2')) {
-    throw new Error('pull_request trigger must cover v2');
+  for (const branch of ['main', 'v2']) {
+    if (!branches.includes(branch)) {
+      throw new Error(`pull_request trigger must cover ${branch}`);
+    }
   }
   if ('paths' in pullRequest || 'paths-ignore' in pullRequest) {
     throw new Error('pull_request trigger must not use path filters');

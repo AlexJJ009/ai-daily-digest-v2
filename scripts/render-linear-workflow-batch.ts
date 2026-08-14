@@ -6,6 +6,7 @@ interface BatchDefinition {
   workingBranch: string;
   includedIssues: string[];
   acceptance: string[];
+  permittedPaths: string[];
 }
 
 const DEFINITIONS: Record<string, BatchDefinition> = {
@@ -19,10 +20,37 @@ const DEFINITIONS: Record<string, BatchDefinition> = {
       'Provide candidate-bound CI, High-risk gate self-tests, and fresh independent review.',
       'Leave real two-run workflow_dispatch acceptance to post-merge GON-23.',
     ],
+    permittedPaths: [
+      'README.md', 'bun.lock', 'package.json', 'scripts/', 'src/', 'tests/',
+      'linear_workflow/reviews/', '.github/workflows/digest.yml',
+      '.github/workflows/linear-workflow-runtime.yml',
+    ],
+  },
+  'GON-23': {
+    id: 'GON-23',
+    baseSha: '3fa12ba60962867cc79d4199a447c2bcf0526969',
+    workingBranch: 'linear/gon-23-promote-main-accept',
+    includedIssues: ['GON-17'],
+    acceptance: [
+      'Remove Pages deployment and production HTML conversion while preserving dated Markdown, RSS, and repository commits.',
+      'Require candidate-bound pull-request validation for both main and v2.',
+      'Provide full High-risk CI and fresh independent review, then stop at the implementation PR merge approval boundary.',
+    ],
+    permittedPaths: [
+      '.github/workflows/digest.yml',
+      '.github/workflows/linear-workflow-runtime.yml',
+      'README.md',
+      'scripts/check-linear-workflow-runtime.ts',
+      'scripts/check-production-workflow.ts',
+      'scripts/render-linear-workflow-batch.ts',
+      'tests/workflows/digest-workflow.test.ts',
+      'tests/workflows/linear-workflow-runtime.test.ts',
+      'linear_workflow/reviews/',
+    ],
   },
 };
 
-const batchId = process.env.LINEAR_BATCH_ID ?? 'GON-16';
+const batchId = process.env.LINEAR_BATCH_ID ?? 'GON-23';
 const definition = DEFINITIONS[batchId];
 if (!definition) throw new Error(`unsupported LINEAR_BATCH_ID: ${batchId}`);
 const candidate = process.env.CANDIDATE_SHA;
@@ -50,11 +78,7 @@ console.log(JSON.stringify({
     candidate_sha: candidate,
     github_pull_request: null,
   }],
-  permitted_paths: [
-    'README.md', 'bun.lock', 'package.json', 'scripts/', 'src/', 'tests/',
-    'linear_workflow/reviews/', '.github/workflows/digest.yml',
-    '.github/workflows/linear-workflow-runtime.yml',
-  ],
+  permitted_paths: definition.permittedPaths,
   changed_paths: changedPaths,
   integration_evidence: null,
 }));
