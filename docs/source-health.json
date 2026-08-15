@@ -1,0 +1,763 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-15T04:21:01.471Z",
+  "configuredSources": 92,
+  "activeSources": 92,
+  "deprecatedSources": 0,
+  "successfulSources": 83,
+  "failedSources": 9,
+  "coverageRatio": 0.9021739130434783,
+  "recentArticles": 37,
+  "thresholds": {
+    "minimumCoverageRatio": 0.5,
+    "minimumRecentArticles": 3
+  },
+  "meetsThresholds": true,
+  "sources": [
+    {
+      "sourceId": "simonwillison-net-1",
+      "name": "simonwillison.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "jeffgeerling-com-2",
+      "name": "jeffgeerling.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "seangoedecke-com-3",
+      "name": "seangoedecke.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "krebsonsecurity-com-4",
+      "name": "krebsonsecurity.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "daringfireball-net-5",
+      "name": "daringfireball.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 48,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "ericmigi-com-6",
+      "name": "ericmigi.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 67,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "antirez-com-7",
+      "name": "antirez.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 100,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "idiallo-com-8",
+      "name": "idiallo.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "maurycyz-com-9",
+      "name": "maurycyz.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 5,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "pluralistic-net-10",
+      "name": "pluralistic.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "shkspr-mobi-11",
+      "name": "shkspr.mobi",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "lcamtuf-substack-com-12",
+      "name": "lcamtuf.substack.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
+    },
+    {
+      "sourceId": "mitchellh-com-13",
+      "name": "mitchellh.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 53,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "dynomight-net-14",
+      "name": "dynomight.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "utcc-utoronto-ca-cks-15",
+      "name": "utcc.utoronto.ca/~cks",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
+    },
+    {
+      "sourceId": "xeiaso-net-16",
+      "name": "xeiaso.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "devblogs-microsoft-com-oldnewthing-17",
+      "name": "devblogs.microsoft.com/oldnewthing",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "righto-com-18",
+      "name": "righto.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "lucumr-pocoo-org-19",
+      "name": "lucumr.pocoo.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "skyfall-dev-20",
+      "name": "skyfall.dev",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 9,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "garymarcus-substack-com-21",
+      "name": "garymarcus.substack.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
+    },
+    {
+      "sourceId": "rachelbythebay-com-22",
+      "name": "rachelbythebay.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
+    },
+    {
+      "sourceId": "overreacted-io-23",
+      "name": "overreacted.io",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 58,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "timsh-org-24",
+      "name": "timsh.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 11,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "johndcook-com-25",
+      "name": "johndcook.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "gilesthomas-com-26",
+      "name": "gilesthomas.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "matklad-github-io-27",
+      "name": "matklad.github.io",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "derekthompson-org-28",
+      "name": "derekthompson.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "evanhahn-com-29",
+      "name": "evanhahn.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "terriblesoftware-org-30",
+      "name": "terriblesoftware.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "rakhim-exotext-com-31",
+      "name": "rakhim.exotext.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 35,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "joanwestenberg-com-32",
+      "name": "joanwestenberg.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Active official feed; replaced the upstream /rss URL after the 2026-08-12 audit confirmed HTTP 404 and verified /feed as RSS."
+    },
+    {
+      "sourceId": "xania-org-33",
+      "name": "xania.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "micahflee-com-34",
+      "name": "micahflee.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 15,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "nesbitt-io-35",
+      "name": "nesbitt.io",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "construction-physics-com-36",
+      "name": "construction-physics.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "tedium-co-37",
+      "name": "tedium.co",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "susam-net-38",
+      "name": "susam.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 9,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "entropicthoughts-com-39",
+      "name": "entropicthoughts.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "buttondown-com-hillelwayne-40",
+      "name": "buttondown.com/hillelwayne",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "dwarkesh-com-41",
+      "name": "dwarkesh.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "borretti-me-42",
+      "name": "borretti.me",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "wheresyoured-at-43",
+      "name": "wheresyoured.at",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 15,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "jayd-ml-44",
+      "name": "jayd.ml",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "minimaxir-com-45",
+      "name": "minimaxir.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "geohot-github-io-46",
+      "name": "geohot.github.io",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "paulgraham-com-47",
+      "name": "paulgraham.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 219,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "filfre-net-48",
+      "name": "filfre.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "blog-jim-nielsen-com-49",
+      "name": "blog.jim-nielsen.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "dfarq-homeip-net-50",
+      "name": "dfarq.homeip.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "jyn-dev-51",
+      "name": "jyn.dev",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 64,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "geoffreylitt-com-52",
+      "name": "geoffreylitt.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 11,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "downtowndougbrown-com-53",
+      "name": "downtowndougbrown.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "brutecat-com-54",
+      "name": "brutecat.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 6,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "eli-thegreenplace-net-55",
+      "name": "eli.thegreenplace.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 5,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "abortretry-fail-56",
+      "name": "abortretry.fail",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "fabiensanglard-net-57",
+      "name": "fabiensanglard.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 144,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "oldvcr-blogspot-com-58",
+      "name": "oldvcr.blogspot.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "bogdanthegeek-github-io-59",
+      "name": "bogdanthegeek.github.io",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 8,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "hugotunius-se-60",
+      "name": "hugotunius.se",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "gwern-net-61",
+      "name": "gwern.net",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
+    },
+    {
+      "sourceId": "berthub-eu-62",
+      "name": "berthub.eu",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 369,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "chadnauseam-com-63",
+      "name": "chadnauseam.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 42,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "simone-org-64",
+      "name": "simone.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 15,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "it-notes-dragas-net-65",
+      "name": "it-notes.dragas.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "beej-us-66",
+      "name": "beej.us",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 45,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "hey-paris-67",
+      "name": "hey.paris",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 75,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "danielwirtz-com-68",
+      "name": "danielwirtz.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "matduggan-com-69",
+      "name": "matduggan.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 15,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "refactoringenglish-com-70",
+      "name": "refactoringenglish.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
+    },
+    {
+      "sourceId": "worksonmymachine-substack-com-71",
+      "name": "worksonmymachine.substack.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
+    },
+    {
+      "sourceId": "philiplaine-com-72",
+      "name": "philiplaine.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 8,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "steveblank-com-73",
+      "name": "steveblank.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "bernsteinbear-com-74",
+      "name": "bernsteinbear.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 11,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "danieldelaney-net-75",
+      "name": "danieldelaney.net",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "troyhunt-com-76",
+      "name": "troyhunt.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 15,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "herman-bearblog-dev-77",
+      "name": "herman.bearblog.dev",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "tomrenner-com-78",
+      "name": "tomrenner.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 27,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "blog-pixelmelt-dev-79",
+      "name": "blog.pixelmelt.dev",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 13,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "martinalderson-com-80",
+      "name": "martinalderson.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 60,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "danielchasehooper-com-81",
+      "name": "danielchasehooper.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "chiark-greenend-org-uk-sgtatham-82",
+      "name": "chiark.greenend.org.uk/~sgtatham",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 29,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "grantslatton-com-83",
+      "name": "grantslatton.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 39,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "experimental-history-com-84",
+      "name": "experimental-history.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "anildash-com-85",
+      "name": "anildash.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
+    },
+    {
+      "sourceId": "aresluna-org-86",
+      "name": "aresluna.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 18,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "michael-stapelberg-ch-87",
+      "name": "michael.stapelberg.ch",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 15,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "miguelgrinberg-com-88",
+      "name": "miguelgrinberg.com",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "keygen-sh-89",
+      "name": "keygen.sh",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 75,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "mjg59-dreamwidth-org-90",
+      "name": "mjg59.dreamwidth.org",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "computer-rip-91",
+      "name": "computer.rip",
+      "registryStatus": "active",
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+    },
+    {
+      "sourceId": "tedunangst-com-92",
+      "name": "tedunangst.com",
+      "registryStatus": "active",
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "Unable to connect. Is the computer able to access the url?"
+    }
+  ]
+}
