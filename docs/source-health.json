@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-15T04:21:01.471Z",
+  "generatedAt": "2026-08-15T04:28:34.448Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 83,
-  "failedSources": 9,
-  "coverageRatio": 0.9021739130434783,
+  "successfulSources": 84,
+  "failedSources": 8,
+  "coverageRatio": 0.9130434782608695,
   "recentArticles": 37,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
@@ -697,10 +697,9 @@
       "sourceId": "anildash-com-85",
       "name": "anildash.com",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 12,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "aresluna-org-86",
