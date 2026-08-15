@@ -135,7 +135,36 @@ the rerun occurs after Feishu's one-hour `uuid` deduplication window. The stable
 Docx create/update decision provides full-day at-most-once behavior. This has a
 deliberate fail-closed trade-off: if the first card send fails after the Docx was
 created, automatic same-day reruns update the Docx but do not resend the card;
-an operator must recover that missing notification manually.
+an operator must recover that missing notification manually. The production
+workflow step retains its historical "then send" label, but card delivery is
+conditional: update runs stop after the verified Docx write.
+
+### Manual recovery after an initial card failure
+
+Treat a failed send as ambiguous because Feishu may have accepted the card even
+when the CLI returned an error. Keep `PRODUCTION_ENABLED=false`, do not rerun the
+daily workflow to recover the notification, and use this operator procedure:
+
+1. Directly enumerate `FEISHU_FOLDER_TOKEN` with the pinned
+   `@larksuite/cli@1.0.86` production bot profile. Require exactly one canonical
+   `AI Daily Digest · YYYY-MM-DD` Docx and record its URL/token. Stop on zero,
+   multiple, or mismatched results.
+2. With an explicitly authorized read-only user identity, read the destination
+   chat's complete message history for that Beijing date. If the canonical card
+   already exists, recovery is complete. If history cannot be read completely,
+   fail closed instead of sending.
+3. Only after absence is proven, obtain a separate production-operation
+   approval and send one card with the configured bot/recipient, the canonical
+   Docx URL, the `buildDigestCard` payload, and
+   `--idempotency-key ai-digest-YYYY-MM-DD` through the pinned CLI. Reusing the
+   date key is only short-window defense in depth; the history check is the
+   manual recovery guard.
+4. If that one-off send returns an ambiguous failure, never retry blindly.
+   Repeat the complete history check first, then record the Docx URL/token,
+   message ID, approval, and outcome without credential values.
+
+This is intentionally an operator runbook, not an automatic retry, outbox,
+database, card-update workflow, or production bot-history dependency.
 
 The production DAG does not generate new HTML, deploy GitHub Pages, or create
 daily GitHub Releases. Historical HTML and the legacy conversion helper remain
