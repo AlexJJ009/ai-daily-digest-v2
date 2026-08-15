@@ -123,8 +123,19 @@ After strict digest validation produces a dated Markdown report and updates
 invoking the pinned official
 `@larksuite/cli@1.0.86` with bot identity. The publisher enumerates the dedicated
 folder directly, exactly matches `AI Daily Digest · YYYY-MM-DD` using the
-Asia/Shanghai date, creates or updates one Docx, and only then sends the linked
-interactive card. Multiple exact Docx matches fail closed.
+Asia/Shanghai date, and creates or updates one Docx. It restores the canonical
+title after either write, re-enumerates the folder, and requires exactly one
+matching Docx with the token just written. Multiple exact matches, title-restore
+failures, and post-write verification failures fail closed.
+
+Only the zero-match path that creates the day's canonical Docx sends the linked
+interactive card. A same-day one-match update never calls the card API, even if
+the rerun occurs after Feishu's one-hour `uuid` deduplication window. The stable
+`ai-digest-YYYY-MM-DD` key remains a short-window defense in depth, while the
+Docx create/update decision provides full-day at-most-once behavior. This has a
+deliberate fail-closed trade-off: if the first card send fails after the Docx was
+created, automatic same-day reruns update the Docx but do not resend the card;
+an operator must recover that missing notification manually.
 
 The production DAG does not generate new HTML, deploy GitHub Pages, or create
 daily GitHub Releases. Historical HTML and the legacy conversion helper remain

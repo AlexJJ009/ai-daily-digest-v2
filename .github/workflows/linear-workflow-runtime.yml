@@ -49,9 +49,9 @@ jobs:
 
       - name: Check the candidate diff
         env:
-          BASE_SHA: b3bfeeafe4834d390e90a9929de8099625fd20b9
+          BASE_SHA: 44056a68343b22fa8099f6fabdaa66f117ca148a
           CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
-          LINEAR_BATCH_ID: GON-24
+          LINEAR_BATCH_ID: GON-26
         run: git diff --check "$BASE_SHA" "$CANDIDATE_SHA"
 
       - name: Scan the candidate tree for secrets
@@ -65,14 +65,14 @@ jobs:
       - name: Run canonical Batch validation
         env:
           CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
-          LINEAR_BATCH_ID: GON-24
+          LINEAR_BATCH_ID: GON-26
           LINEAR_WORKFLOW_SOURCE_SHA: 243acb2411db37bdc107f49210e110f37357387c
         run: |
           git init "$RUNNER_TEMP/linear-workflow"
           git -C "$RUNNER_TEMP/linear-workflow" remote add origin https://github.com/AlexJJ009/agent-tools.git
           git -C "$RUNNER_TEMP/linear-workflow" fetch --depth=1 origin "$LINEAR_WORKFLOW_SOURCE_SHA"
           git -C "$RUNNER_TEMP/linear-workflow" checkout --detach FETCH_HEAD
-          bun run render:batch > "$RUNNER_TEMP/gon-24-batch.json"
+          bun run render:batch > "$RUNNER_TEMP/gon-26-batch.json"
           PYTHONPATH="$RUNNER_TEMP/linear-workflow/linear_workflow/shared/runtime/src" \
             python3 -m linear_workflow_runtime.cli batch-check \
-            --input "$RUNNER_TEMP/gon-24-batch.json"
+            --input "$RUNNER_TEMP/gon-26-batch.json"

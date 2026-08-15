@@ -73,6 +73,29 @@ const DEFINITIONS: Record<string, BatchDefinition> = {
       'tests/workflows/linear-workflow-runtime.test.ts',
     ],
   },
+  'GON-26': {
+    id: 'GON-26',
+    baseBranch: 'main',
+    baseSha: '44056a68343b22fa8099f6fabdaa66f117ca148a',
+    workingBranch: 'linear/gon-26-feishu-card-day-idempotency',
+    includedIssues: ['GON-27'],
+    acceptance: [
+      'Preserve canonical-title restoration and post-write unique-token verification.',
+      'Send the daily card only after creating a new canonical daily Docx.',
+      'Keep every same-day Docx update card-silent, including reruns beyond one hour.',
+      'Document and test the at-most-once manual-recovery boundary after initial card failure.',
+      'Provide full High-risk CI and fresh independent review, then stop at the implementation PR merge approval boundary.',
+    ],
+    permittedPaths: [
+      '.github/workflows/linear-workflow-runtime.yml',
+      'README.md',
+      'linear_workflow/reviews/',
+      'scripts/render-linear-workflow-batch.ts',
+      'src/delivery/feishu.ts',
+      'tests/delivery/feishu.test.ts',
+      'tests/workflows/linear-workflow-runtime.test.ts',
+    ],
+  },
 };
 
 const batchId = process.env.LINEAR_BATCH_ID ?? 'GON-23';
