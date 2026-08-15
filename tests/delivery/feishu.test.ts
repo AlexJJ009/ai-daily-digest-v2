@@ -45,9 +45,9 @@ class FakeGateway implements FeishuGateway {
   }
 }
 
-function input(gateway: FeishuGateway, archivePushed = true) {
+function input(gateway: FeishuGateway, archivePushed = true, publicationTime = now) {
   return {
-    gateway, now, folderToken: 'folder', receiveId: 'chat', receiveIdType: 'chat_id',
+    gateway, now: publicationTime, folderToken: 'folder', receiveId: 'chat', receiveIdType: 'chat_id',
     markdownPath: 'docs/digest.md', archivePushed,
   };
 }
@@ -68,11 +68,54 @@ describe('Feishu daily publication contract', () => {
     expect(gateway.events).toEqual(['list', 'create', 'restore', 'list', 'card:ai-digest-2026-08-13']);
   });
 
-  test('one exact match restores the drifted title, verifies the token, then sends the card', async () => {
+  test('one exact match restores the drifted title and verifies the token without sending a card', async () => {
     const files = parseFolderFiles(await fixture('folder-one'));
     const gateway = new FakeGateway([files, files]);
     expect((await publishDailyDigest(input(gateway))).action).toBe('updated');
-    expect(gateway.events).toEqual(['list', 'update', 'restore', 'list', 'card:ai-digest-2026-08-13']);
+    expect(gateway.events).toEqual(['list', 'update', 'restore', 'list']);
+  });
+
+  test('same-day rerun beyond one hour updates the Docx and remains card-silent', async () => {
+    const created = {
+      token: 'created', name: dailyDigestTitle(now), type: 'docx', url: 'https://example.test/docx/created',
+    };
+    const gateway = new FakeGateway([[], [created], [created], [created]]);
+    await publishDailyDigest(input(gateway));
+    await publishDailyDigest(input(gateway, true, new Date(now.getTime() + 2 * 60 * 60 * 1000)));
+    expect(gateway.events).toEqual([
+      'list', 'create', 'restore', 'list', 'card:ai-digest-2026-08-13',
+      'list', 'update', 'restore', 'list',
+    ]);
+  });
+
+  test('different Beijing dates each create one Docx and send one card', async () => {
+    const first = new FakeGateway([[], [
+      { token: 'created', name: 'AI Daily Digest · 2026-08-13', type: 'docx' },
+    ]]);
+    const second = new FakeGateway([[], [
+      { token: 'created', name: 'AI Daily Digest · 2026-08-14', type: 'docx' },
+    ]]);
+    await publishDailyDigest(input(first));
+    await publishDailyDigest(input(second, true, new Date('2026-08-13T16:30:00.000Z')));
+    expect(first.events.filter((event) => event.startsWith('card:'))).toEqual([
+      'card:ai-digest-2026-08-13',
+    ]);
+    expect(second.events.filter((event) => event.startsWith('card:'))).toEqual([
+      'card:ai-digest-2026-08-14',
+    ]);
+  });
+
+  test('a failed initial card send is not retried automatically on a same-day update', async () => {
+    const created = {
+      token: 'created', name: dailyDigestTitle(now), type: 'docx', url: 'https://example.test/docx/created',
+    };
+    const gateway = new FakeGateway([[], [created], [created], [created]]);
+    gateway.failAt = 'card';
+    await expect(publishDailyDigest(input(gateway))).rejects.toThrow('card failed');
+    gateway.failAt = undefined;
+    expect((await publishDailyDigest(input(gateway))).action).toBe('updated');
+    expect(gateway.events.filter((event) => event.startsWith('card:'))).toHaveLength(1);
+    expect(gateway.events.slice(-4)).toEqual(['list', 'update', 'restore', 'list']);
   });
 
   test('multiple exact matches fail closed before a write', async () => {
@@ -199,7 +242,8 @@ describe('Feishu daily publication contract', () => {
     expect(calls[1]).toContain('doc-one');
     expect(calls[2]).toContain('+update-title');
     expect(listCount).toBe(2);
-    expect(calls[4]).toContain('interactive');
+    expect(calls).toHaveLength(4);
+    expect(calls.flat()).not.toContain('interactive');
   });
 
   test('maps open_id explicitly to the lark-cli user-id flag and rejects unknown types', async () => {

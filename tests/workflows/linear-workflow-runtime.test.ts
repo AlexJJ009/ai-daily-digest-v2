@@ -12,9 +12,9 @@ function expectRejected(source: string, message: string): void {
 describe('linear-workflow-runtime gate canaries', () => {
   test('accepts the repository workflow', () => {
     expect(() => validateLinearWorkflowRuntime(validWorkflow)).not.toThrow();
-    expect(validWorkflow).toContain('BASE_SHA: b3bfeeafe4834d390e90a9929de8099625fd20b9');
-    expect(validWorkflow).toContain('LINEAR_BATCH_ID: GON-24');
-    expect(validWorkflow).toContain('gon-24-batch.json');
+    expect(validWorkflow).toContain('BASE_SHA: 44056a68343b22fa8099f6fabdaa66f117ca148a');
+    expect(validWorkflow).toContain('LINEAR_BATCH_ID: GON-26');
+    expect(validWorkflow).toContain('gon-26-batch.json');
   });
 
   test('fails when the required check job is renamed', () => {

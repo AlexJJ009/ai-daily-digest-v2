@@ -161,12 +161,14 @@ export async function publishDailyDigest(input: PublishDailyDigestInput): Promis
     document.token,
   );
   const idempotencyKey = dailyCardIdempotencyKey(input.now);
-  await input.gateway.sendCard(
-    input.receiveId,
-    input.receiveIdType,
-    buildDigestCard(title, document.url),
-    idempotencyKey,
-  );
+  if (!existing) {
+    await input.gateway.sendCard(
+      input.receiveId,
+      input.receiveIdType,
+      buildDigestCard(title, document.url),
+      idempotencyKey,
+    );
+  }
 
   return { action: existing ? 'updated' : 'created', title, document, idempotencyKey };
 }
