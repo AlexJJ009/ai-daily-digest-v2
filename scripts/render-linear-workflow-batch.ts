@@ -2,6 +2,7 @@ import { $ } from 'bun';
 
 interface BatchDefinition {
   id: string;
+  baseBranch: string;
   baseSha: string;
   workingBranch: string;
   includedIssues: string[];
@@ -12,6 +13,7 @@ interface BatchDefinition {
 const DEFINITIONS: Record<string, BatchDefinition> = {
   'GON-16': {
     id: 'GON-16',
+    baseBranch: 'v2',
     baseSha: '1c9a41162a2d47cf317e26060441319b9722596b',
     workingBranch: 'linear/gon-16-feishu-delivery',
     includedIssues: ['GON-19', 'GON-21'],
@@ -28,6 +30,7 @@ const DEFINITIONS: Record<string, BatchDefinition> = {
   },
   'GON-23': {
     id: 'GON-23',
+    baseBranch: 'v2',
     baseSha: '3fa12ba60962867cc79d4199a447c2bcf0526969',
     workingBranch: 'linear/gon-23-promote-main-accept',
     includedIssues: ['GON-17'],
@@ -46,6 +49,28 @@ const DEFINITIONS: Record<string, BatchDefinition> = {
       'tests/workflows/digest-workflow.test.ts',
       'tests/workflows/linear-workflow-runtime.test.ts',
       'linear_workflow/reviews/',
+    ],
+  },
+  'GON-24': {
+    id: 'GON-24',
+    baseBranch: 'main',
+    baseSha: 'b3bfeeafe4834d390e90a9929de8099625fd20b9',
+    workingBranch: 'linear/gon-24-feishu-title-idempotency',
+    includedIssues: ['GON-25'],
+    acceptance: [
+      'Restore the canonical daily Docx title after every Markdown create or overwrite.',
+      'Re-enumerate the configured folder and require exactly one canonical title whose token matches the written document.',
+      'Send the interactive card only after post-write title and token verification succeeds.',
+      'Provide full High-risk CI and fresh independent review, then stop at the implementation PR merge approval boundary.',
+    ],
+    permittedPaths: [
+      '.github/workflows/linear-workflow-runtime.yml',
+      'linear_workflow/reviews/',
+      'scripts/render-linear-workflow-batch.ts',
+      'src/delivery/feishu.ts',
+      'src/delivery/lark-cli.ts',
+      'tests/delivery/feishu.test.ts',
+      'tests/workflows/linear-workflow-runtime.test.ts',
     ],
   },
 };
@@ -72,7 +97,7 @@ console.log(JSON.stringify({
   full_ci_point: 'After the exact code candidate is frozen and before independent review.',
   work_references: [{
     repository_full_name: 'AlexJJ009/ai-daily-digest-v2',
-    base_branch: 'v2',
+    base_branch: definition.baseBranch,
     base_sha: definition.baseSha,
     working_branch: definition.workingBranch,
     candidate_sha: candidate,

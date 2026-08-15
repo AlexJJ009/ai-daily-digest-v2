@@ -17,6 +17,7 @@ export interface FeishuGateway {
   listFolder(folderToken: string): Promise<FolderFile[]>;
   createDocument(folderToken: string, title: string, markdownPath: string): Promise<FeishuDocument>;
   updateDocument(document: FolderFile, markdownPath: string): Promise<FeishuDocument>;
+  restoreDocumentTitle(document: FeishuDocument, title: string): Promise<void>;
   sendCard(receiveId: string, receiveIdType: string, card: string, idempotencyKey: string): Promise<void>;
 }
 
@@ -64,6 +65,25 @@ export function findExactDailyDocument(files: FolderFile[], title: string): Fold
     throw new Error(`multiple Docx files exactly match ${JSON.stringify(title)}; refusing to publish`);
   }
   return matches[0];
+}
+
+export function verifyWrittenDailyDocument(
+  files: FolderFile[],
+  title: string,
+  writtenToken: string,
+): FolderFile {
+  const matches = files.filter((file) => file.name === title && file.type === 'docx');
+  if (matches.length !== 1) {
+    throw new Error(
+      `post-write verification expected exactly one Docx matching ${JSON.stringify(title)}; found ${matches.length}`,
+    );
+  }
+  if (matches[0]!.token !== writtenToken) {
+    throw new Error(
+      `post-write verification token mismatch: wrote ${JSON.stringify(writtenToken)}, found ${JSON.stringify(matches[0]!.token)}`,
+    );
+  }
+  return matches[0]!;
 }
 
 export function buildDigestCard(title: string, documentUrl: string): string {
@@ -134,6 +154,12 @@ export async function publishDailyDigest(input: PublishDailyDigestInput): Promis
   const document = existing
     ? await input.gateway.updateDocument(existing, input.markdownPath)
     : await input.gateway.createDocument(input.folderToken, title, input.markdownPath);
+  await input.gateway.restoreDocumentTitle(document, title);
+  verifyWrittenDailyDocument(
+    await input.gateway.listFolder(input.folderToken),
+    title,
+    document.token,
+  );
   const idempotencyKey = dailyCardIdempotencyKey(input.now);
   await input.gateway.sendCard(
     input.receiveId,

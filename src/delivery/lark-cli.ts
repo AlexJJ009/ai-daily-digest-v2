@@ -110,6 +110,12 @@ export class LarkCliGateway implements FeishuGateway {
     ]), document.token, document.url);
   }
 
+  async restoreDocumentTitle(document: FeishuDocument, title: string): Promise<void> {
+    await this.execute([
+      'drive', '+update-title', '--url', document.url, '--title', title,
+    ]);
+  }
+
   async sendCard(receiveId: string, receiveIdType: string, card: string, key: string): Promise<void> {
     const recipientFlag = receiveIdType === 'chat_id'
       ? '--chat-id'
