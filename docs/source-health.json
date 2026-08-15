@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-15T06:13:25.382Z",
+  "generatedAt": "2026-08-15T06:18:28.024Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 85,
-  "failedSources": 7,
-  "coverageRatio": 0.9239130434782609,
+  "successfulSources": 84,
+  "failedSources": 8,
+  "coverageRatio": 0.9130434782608695,
   "recentArticles": 37,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
@@ -575,9 +575,10 @@
       "sourceId": "refactoringenglish-com-70",
       "name": "refactoringenglish.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 18,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "worksonmymachine-substack-com-71",
