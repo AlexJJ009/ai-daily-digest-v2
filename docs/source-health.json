@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-15T08:12:04.297Z",
+  "generatedAt": "2026-08-16T01:02:09.785Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 84,
-  "failedSources": 8,
-  "coverageRatio": 0.9130434782608695,
-  "recentArticles": 37,
+  "successfulSources": 81,
+  "failedSources": 11,
+  "coverageRatio": 0.8804347826086957,
+  "recentArticles": 29,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -34,9 +34,10 @@
       "sourceId": "seangoedecke-com-3",
       "name": "seangoedecke.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 30,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "krebsonsecurity-com-4",
@@ -406,9 +407,10 @@
       "sourceId": "blog-jim-nielsen-com-49",
       "name": "blog.jim-nielsen.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 10,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "dfarq-homeip-net-50",
@@ -737,9 +739,10 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 25,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "computer-rip-91",
