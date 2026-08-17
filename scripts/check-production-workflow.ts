@@ -59,6 +59,19 @@ export function validateProductionWorkflow(source: string): void {
   }
 
   const digestSteps = arrayAt(digest.steps, 'digest steps').map((step) => objectAt(step, 'digest step'));
+  const generateStep = digestSteps.find((step) => step.id === 'generate');
+  if (!generateStep || !String(generateStep.run ?? '').includes('bun scripts/digest.ts')) {
+    throw new Error('digest generation step must retain id generate');
+  }
+  const failureNotificationStep = digestSteps.find((step) =>
+    String(step.run ?? '').includes('bun scripts/notify-feishu-failure.ts'),
+  );
+  const failureCondition = String(failureNotificationStep?.if ?? '');
+  if (!failureNotificationStep ||
+      !failureCondition.includes('failure()') ||
+      !failureCondition.includes("steps.generate.outcome == 'failure'")) {
+    throw new Error('digest generation failure must notify Feishu after retries are exhausted');
+  }
   const requiredOrder = [
     'bun scripts/digest.ts',
     'git push origin',
