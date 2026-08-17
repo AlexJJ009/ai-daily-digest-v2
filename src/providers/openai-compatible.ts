@@ -23,6 +23,15 @@ export interface ProviderRuntime {
   sleep(milliseconds: number): Promise<void>;
   maxAttempts: number;
   retryDelayMs: number;
+  onRetry(details: ProviderRetryDetails): void;
+}
+
+export interface ProviderRetryDetails {
+  attempt: number;
+  maxAttempts: number;
+  delayMs: number;
+  status?: number;
+  reason: string;
 }
 
 export class ProviderConfigError extends Error {}
@@ -117,8 +126,37 @@ function extractChatCompletionsText(payload: unknown): string {
     .trim();
 }
 
-function retryableStatus(status: number): boolean {
-  return status === 408 || status === 409 || status === 429 || status >= 500;
+function gatewayErrorFields(responseBody: string): {
+  type: string;
+  code: string;
+  message: string;
+} {
+  try {
+    const payload = JSON.parse(responseBody) as {
+      error?: { type?: unknown; code?: unknown; message?: unknown };
+    };
+    return {
+      type: typeof payload.error?.type === 'string' ? payload.error.type : '',
+      code: typeof payload.error?.code === 'string' ? payload.error.code : '',
+      message: typeof payload.error?.message === 'string' ? payload.error.message : '',
+    };
+  } catch {
+    return { type: '', code: '', message: responseBody };
+  }
+}
+
+function retryableResponse(status: number, responseBody: string): boolean {
+  if (status === 408 || status === 409 || status === 429 || status >= 500) return true;
+  if (status !== 400) return false;
+
+  const error = gatewayErrorFields(responseBody);
+  const typeAndCode = `${error.type} ${error.code}`.toLowerCase();
+  const message = error.message.toLowerCase();
+  return typeAndCode.includes('upstream_error') ||
+    message.includes('upstream error') ||
+    message.includes('temporarily unavailable') ||
+    message.includes('暂停同步请求') ||
+    message.includes('号池正在遭受恶意毁号请求');
 }
 
 export function createOpenAICompatibleClient(
@@ -128,8 +166,14 @@ export function createOpenAICompatibleClient(
   const resolvedRuntime: ProviderRuntime = {
     fetch: runtime.fetch ?? fetch,
     sleep: runtime.sleep ?? ((milliseconds) => Bun.sleep(milliseconds)),
-    maxAttempts: runtime.maxAttempts ?? 3,
-    retryDelayMs: runtime.retryDelayMs ?? 250,
+    maxAttempts: runtime.maxAttempts ?? 5,
+    retryDelayMs: runtime.retryDelayMs ?? 5_000,
+    onRetry: runtime.onRetry ?? ((details) => {
+      console.warn(
+        `[provider] transient model API failure on attempt ${details.attempt}/${details.maxAttempts}; ` +
+        `retrying in ${details.delayMs}ms: ${details.reason}`,
+      );
+    }),
   };
   if (resolvedRuntime.maxAttempts < 1) {
     throw new ProviderConfigError('maxAttempts must be at least 1');
@@ -171,10 +215,20 @@ export function createOpenAICompatibleClient(
                 responseBody ? `: ${responseBody.slice(0, 300)}` : ''
               }`,
             );
-            if (!retryableStatus(response.status) || attempt === resolvedRuntime.maxAttempts) {
+            if (!retryableResponse(response.status, responseBody) || attempt === resolvedRuntime.maxAttempts) {
               throw error;
             }
             lastError = error;
+            const delayMs = resolvedRuntime.retryDelayMs * 2 ** (attempt - 1);
+            resolvedRuntime.onRetry({
+              attempt,
+              maxAttempts: resolvedRuntime.maxAttempts,
+              delayMs,
+              status: response.status,
+              reason: error.message,
+            });
+            await resolvedRuntime.sleep(delayMs);
+            continue;
           } else {
             const payload: unknown = await response.json();
             const text =
@@ -193,8 +247,15 @@ export function createOpenAICompatibleClient(
           if (error instanceof ProviderResponseError || attempt === resolvedRuntime.maxAttempts) {
             throw error;
           }
+          const delayMs = resolvedRuntime.retryDelayMs * 2 ** (attempt - 1);
+          resolvedRuntime.onRetry({
+            attempt,
+            maxAttempts: resolvedRuntime.maxAttempts,
+            delayMs,
+            reason: error instanceof Error ? error.message : String(error),
+          });
+          await resolvedRuntime.sleep(delayMs);
         }
-        await resolvedRuntime.sleep(resolvedRuntime.retryDelayMs * attempt);
       }
       throw lastError instanceof Error
         ? lastError

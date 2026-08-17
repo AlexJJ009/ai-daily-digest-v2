@@ -72,4 +72,13 @@ describe('production workflow canaries', () => {
       .replace('bun scripts/digest.ts \\', 'bun scripts/publish-feishu.ts --markdown premature.md --archive-pushed\n          bun scripts/digest.ts \\');
     expect(() => validateProductionWorkflow(mutated)).toThrow('out of order');
   });
+
+  test('notifies Feishu only after digest generation fails', () => {
+    const withoutNotification = valid.replace(
+      /\n      - name: Notify Feishu after exhausted digest retries[\s\S]*?run: bun scripts\/notify-feishu-failure\.ts\n/,
+      '\n',
+    );
+    expect(() => validateProductionWorkflow(withoutNotification)).toThrow('notify Feishu');
+    expect(valid.indexOf('id: generate')).toBeLessThan(valid.indexOf('bun scripts/notify-feishu-failure.ts'));
+  });
 });
