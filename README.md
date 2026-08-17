@@ -54,9 +54,11 @@ V2 uses one OpenAI-compatible provider and does not require a Gemini key.
 | `OPENAI_RESPONSES_PATH` | `/responses` | Responses endpoint path |
 | `OPENAI_CHAT_COMPLETIONS_PATH` | `/chat/completions` | Chat Completions endpoint path |
 
-The provider retries transient transport, `408`, `409`, `429`, and `5xx`
-failures up to three attempts. It does not turn an empty or malformed successful
-response into a report.
+The provider makes at most five attempts for transient transport, `408`, `409`,
+`429`, and `5xx` failures, plus narrowly recognized relay `400` responses that
+identify an upstream outage or temporarily suspended shared account pool.
+Ordinary invalid requests remain fail-fast, and an empty or malformed successful
+response never becomes a report.
 
 Before writing Markdown or RSS, the publication gate validates every requested
 model result and the assembled typed report. The centralized defaults require
