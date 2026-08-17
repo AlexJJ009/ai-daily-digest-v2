@@ -96,6 +96,35 @@ const DEFINITIONS: Record<string, BatchDefinition> = {
       'tests/workflows/linear-workflow-runtime.test.ts',
     ],
   },
+  'GON-29': {
+    id: 'GON-29',
+    baseBranch: 'main',
+    baseSha: 'c47ae905b41bf2e51d0d23c27b0c9c4a813301c2',
+    workingBranch: 'linear/gon-29-relay-retry-alert',
+    includedIssues: ['GON-30'],
+    acceptance: [
+      'Retry narrowly recognized transient provider failures for at most five attempts with 5, 10, 20, and 40 second backoffs.',
+      'Keep ordinary invalid-request HTTP 400 responses fail-fast.',
+      'After digest generation or strict validation remains failed, keep the workflow failed, send one cause-neutral Feishu failure alert linked to the exact Actions run, and skip archive, Docx, and success-card publication.',
+      'Rebind the pull-request gate to GON-29 without weakening required validation.',
+      'Provide full High-risk CI and fresh independent review, then stop at the implementation PR merge approval boundary.',
+    ],
+    permittedPaths: [
+      '.github/workflows/digest.yml',
+      '.github/workflows/linear-workflow-runtime.yml',
+      'README.md',
+      'linear_workflow/reviews/',
+      'scripts/check-production-workflow.ts',
+      'scripts/notify-feishu-failure.ts',
+      'scripts/render-linear-workflow-batch.ts',
+      'src/delivery/failure-notification.ts',
+      'src/providers/openai-compatible.ts',
+      'tests/delivery/failure-notification.test.ts',
+      'tests/providers/openai-compatible.test.ts',
+      'tests/workflows/digest-workflow.test.ts',
+      'tests/workflows/linear-workflow-runtime.test.ts',
+    ],
+  },
 };
 
 const batchId = process.env.LINEAR_BATCH_ID ?? 'GON-23';

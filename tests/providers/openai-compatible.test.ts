@@ -77,6 +77,84 @@ describe('OpenAI-compatible provider', () => {
     expect(attempts).toBe(2);
   });
 
+  test('retries the relay pool-protection 400 observed in production', async () => {
+    let attempts = 0;
+    const delays: number[] = [];
+    const client = createOpenAICompatibleClient(
+      loadOpenAICompatibleConfig({ OPENAI_API_KEY: 'fixture-key' }),
+      {
+        maxAttempts: 5,
+        retryDelayMs: 5_000,
+        sleep: async (milliseconds) => { delays.push(milliseconds); },
+        onRetry: () => {},
+        fetch: async () => {
+          attempts++;
+          if (attempts < 3) {
+            return new Response(JSON.stringify({
+              error: {
+                message: '当前号池正在遭受恶意毁号请求，暂停同步请求',
+                type: 'new_api_error',
+                code: 'invalid_request',
+              },
+            }), { status: 400 });
+          }
+          return new Response(await fixture('responses.json'), { status: 200 });
+        },
+      },
+    );
+
+    expect(await client.call('score these')).toBe('{"results":[]}');
+    expect(attempts).toBe(3);
+    expect(delays).toEqual([5_000, 10_000]);
+  });
+
+  test('does not retry an ordinary invalid request 400', async () => {
+    let attempts = 0;
+    const client = createOpenAICompatibleClient(
+      loadOpenAICompatibleConfig({ OPENAI_API_KEY: 'fixture-key' }),
+      {
+        maxAttempts: 5,
+        retryDelayMs: 0,
+        sleep: async () => {},
+        onRetry: () => {},
+        fetch: async () => {
+          attempts++;
+          return new Response(JSON.stringify({
+            error: { message: 'model not found', type: 'invalid_request_error', code: 'model_not_found' },
+          }), { status: 400 });
+        },
+      },
+    );
+
+    await expect(client.call('prompt')).rejects.toThrow('model not found');
+    expect(attempts).toBe(1);
+  });
+
+  test('exhausts the default five attempts for a persistent relay pool-protection error', async () => {
+    let attempts = 0;
+    const client = createOpenAICompatibleClient(
+      loadOpenAICompatibleConfig({ OPENAI_API_KEY: 'fixture-key' }),
+      {
+        retryDelayMs: 0,
+        sleep: async () => {},
+        onRetry: () => {},
+        fetch: async () => {
+          attempts++;
+          return new Response(JSON.stringify({
+            error: {
+              message: '当前号池正在遭受恶意毁号请求，暂停同步请求',
+              type: 'new_api_error',
+              code: 'invalid_request',
+            },
+          }), { status: 400 });
+        },
+      },
+    );
+
+    await expect(client.call('prompt')).rejects.toThrow('暂停同步请求');
+    expect(attempts).toBe(5);
+  });
+
   test('requires an API key and rejects unknown styles', () => {
     expect(() => loadOpenAICompatibleConfig({})).toThrow(ProviderConfigError);
     expect(() =>

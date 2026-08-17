@@ -54,9 +54,11 @@ V2 uses one OpenAI-compatible provider and does not require a Gemini key.
 | `OPENAI_RESPONSES_PATH` | `/responses` | Responses endpoint path |
 | `OPENAI_CHAT_COMPLETIONS_PATH` | `/chat/completions` | Chat Completions endpoint path |
 
-The provider retries transient transport, `408`, `409`, `429`, and `5xx`
-failures up to three attempts. It does not turn an empty or malformed successful
-response into a report.
+The provider makes at most five attempts for transient transport, `408`, `409`,
+`429`, and `5xx` failures, plus narrowly recognized relay `400` responses that
+identify an upstream outage or temporarily suspended shared account pool.
+Ordinary invalid requests remain fail-fast, and an empty or malformed successful
+response never becomes a report.
 
 Before writing Markdown or RSS, the publication gate validates every requested
 model result and the assembled typed report. The centralized defaults require
@@ -117,6 +119,15 @@ variables, so the workflow supports third-party OpenAI-compatible endpoints and
 does not require the official OpenAI host or a Gemini key. Credential values
 remain GitHub Secrets. A preflight step validates every required name before
 source fetching or model calls.
+
+Model calls make at most five attempts. Standard transient HTTP responses
+(`408`, `409`, `429`, and `5xx`) are retried, as are narrowly recognized relay
+`400` responses whose body identifies an upstream outage or a temporarily
+suspended shared account pool. Ordinary invalid requests remain fail-fast.
+Retries use 5, 10, 20, and 40 second backoffs. If digest generation still fails,
+the workflow remains failed and sends a red Feishu card linked to that Actions
+run; it does not create an archive, Docx, or success card. Recovery is a manual
+workflow dispatch after the provider is healthy.
 
 After strict digest validation produces a dated Markdown report and updates
 `docs/feed.xml`, the DAG pushes those public repository archives to Git before
