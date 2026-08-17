@@ -24,7 +24,7 @@ export function buildDigestFailureCard(input: DigestFailureNotification): string
     },
     header: {
       title: { tag: 'plain_text', content: title },
-      subtitle: { tag: 'plain_text', content: '有限重试后仍未完成，未发布今日日报' },
+      subtitle: { tag: 'plain_text', content: '生成流程未完成，今日日报未发布' },
       template: 'red',
       text_tag_list: [
         { tag: 'text_tag', text: { tag: 'plain_text', content: '需人工处理' }, color: 'red' },
@@ -37,7 +37,7 @@ export function buildDigestFailureCard(input: DigestFailureNotification): string
       elements: [
         {
           tag: 'markdown',
-          content: '模型请求在有限重试后仍失败。GitHub 归档、飞书 Docx 和日报卡片均未发布。\n\n请查看 Actions 日志，待中转站恢复后手动运行。',
+          content: '日报生成流程失败。GitHub 归档、飞书 Docx 和日报卡片均未发布。\n\n请打开 Actions 日志查看准确原因，处理后手动运行。',
         },
         {
           tag: 'button',

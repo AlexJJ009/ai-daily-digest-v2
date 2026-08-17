@@ -27,5 +27,8 @@ describe('digest failure notification', () => {
       { type: 'open_url', default_url: input.runUrl },
     ]);
     expect(JSON.stringify(card)).toContain('未发布');
+    expect(JSON.stringify(card)).toContain('查看准确原因');
+    expect(JSON.stringify(card)).not.toContain('模型请求');
+    expect(JSON.stringify(card)).not.toContain('中转站恢复');
   });
 });
