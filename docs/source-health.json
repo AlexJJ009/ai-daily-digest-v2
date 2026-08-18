@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-16T01:02:09.785Z",
+  "generatedAt": "2026-08-18T00:58:27.376Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 81,
-  "failedSources": 11,
-  "coverageRatio": 0.8804347826086957,
-  "recentArticles": 29,
+  "successfulSources": 82,
+  "failedSources": 10,
+  "coverageRatio": 0.8913043478260869,
+  "recentArticles": 22,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -34,10 +34,9 @@
       "sourceId": "seangoedecke-com-3",
       "name": "seangoedecke.com",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "krebsonsecurity-com-4",
@@ -473,7 +472,7 @@
       "name": "fabiensanglard.net",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 144,
+      "articleCount": 145,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -660,7 +659,7 @@
       "name": "martinalderson.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 60,
+      "articleCount": 61,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -699,9 +698,10 @@
       "sourceId": "anildash-com-85",
       "name": "anildash.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 12,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "aresluna-org-86",
@@ -739,10 +739,9 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "computer-rip-91",
