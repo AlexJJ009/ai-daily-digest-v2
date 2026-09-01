@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-31T03:11:46.523Z",
+  "generatedAt": "2026-09-01T03:16:39.169Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 85,
-  "failedSources": 7,
-  "coverageRatio": 0.9239130434782609,
-  "recentArticles": 21,
+  "successfulSources": 84,
+  "failedSources": 8,
+  "coverageRatio": 0.9130434782608695,
+  "recentArticles": 23,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -657,7 +657,7 @@
       "name": "martinalderson.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 63,
+      "articleCount": 64,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -736,9 +736,10 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 25,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 504"
     },
     {
       "sourceId": "computer-rip-91",
