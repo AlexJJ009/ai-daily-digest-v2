@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T00:18:17.842Z",
+  "generatedAt": "2026-11-01T00:22:31.016Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
   "successfulSources": 84,
   "failedSources": 8,
   "coverageRatio": 0.9130434782608695,
-  "recentArticles": 29,
+  "recentArticles": 23,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -98,9 +98,10 @@
       "sourceId": "shkspr-mobi-11",
       "name": "shkspr.mobi",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 20,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 415"
     },
     {
       "sourceId": "lcamtuf-substack-com-12",
@@ -543,10 +544,9 @@
       "sourceId": "beej-us-66",
       "name": "beej.us",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 45,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "hey-paris-67",
@@ -561,7 +561,7 @@
       "name": "danielwirtz.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 10,
+      "articleCount": 20,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
