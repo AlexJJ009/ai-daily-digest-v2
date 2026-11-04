@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T05:20:26.375Z",
+  "generatedAt": "2026-11-04T04:50:31.242Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 85,
-  "failedSources": 7,
-  "coverageRatio": 0.9239130434782609,
-  "recentArticles": 25,
+  "successfulSources": 84,
+  "failedSources": 8,
+  "coverageRatio": 0.9130434782608695,
+  "recentArticles": 39,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -263,7 +263,7 @@
       "name": "rakhim.exotext.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 35,
+      "articleCount": 36,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -736,9 +736,10 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 25,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "computer-rip-91",
