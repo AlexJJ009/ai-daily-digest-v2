@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-06T05:04:47.791Z",
+  "generatedAt": "2026-11-07T04:38:08.933Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 83,
-  "failedSources": 9,
-  "coverageRatio": 0.9021739130434783,
-  "recentArticles": 25,
+  "successfulSources": 84,
+  "failedSources": 8,
+  "coverageRatio": 0.9130434782608695,
+  "recentArticles": 28,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -116,7 +116,7 @@
       "name": "mitchellh.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 54,
+      "articleCount": 55,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -248,7 +248,7 @@
       "name": "evanhahn.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 7,
+      "articleCount": 8,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -737,10 +737,9 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "computer-rip-91",
