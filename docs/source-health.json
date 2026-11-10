@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-09T04:39:11.142Z",
+  "generatedAt": "2026-11-10T05:55:39.119Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
   "successfulSources": 83,
   "failedSources": 9,
   "coverageRatio": 0.9021739130434783,
-  "recentArticles": 24,
+  "recentArticles": 37,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
