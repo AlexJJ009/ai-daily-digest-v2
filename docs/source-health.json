@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-17T06:31:53.146Z",
+  "generatedAt": "2026-11-18T05:53:31.589Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
-  "successfulSources": 82,
-  "failedSources": 10,
-  "coverageRatio": 0.8913043478260869,
-  "recentArticles": 35,
+  "successfulSources": 87,
+  "failedSources": 5,
+  "coverageRatio": 0.9456521739130435,
+  "recentArticles": 40,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -66,10 +66,9 @@
       "sourceId": "antirez-com-7",
       "name": "antirez.com",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 100,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "idiallo-com-8",
@@ -107,10 +106,9 @@
       "sourceId": "lcamtuf-substack-com-12",
       "name": "lcamtuf.substack.com",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 403"
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "mitchellh-com-13",
@@ -182,10 +180,9 @@
       "sourceId": "garymarcus-substack-com-21",
       "name": "garymarcus.substack.com",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 403"
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "rachelbythebay-com-22",
@@ -504,10 +501,9 @@
       "sourceId": "gwern-net-61",
       "name": "gwern.net",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 403"
+      "health": "healthy",
+      "articleCount": 14,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "berthub-eu-62",
@@ -585,10 +581,9 @@
       "sourceId": "worksonmymachine-substack-com-71",
       "name": "worksonmymachine.substack.com",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 403"
+      "health": "healthy",
+      "articleCount": 20,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "philiplaine-com-72",
@@ -674,10 +669,9 @@
       "sourceId": "chiark-greenend-org-uk-sgtatham-82",
       "name": "chiark.greenend.org.uk/~sgtatham",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 30,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "grantslatton-com-83",
@@ -739,9 +733,10 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 25,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "timeout"
     },
     {
       "sourceId": "computer-rip-91",
