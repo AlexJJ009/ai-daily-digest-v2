@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T00:20:04.113Z",
+  "generatedAt": "2026-11-24T00:17:43.965Z",
   "configuredSources": 92,
   "activeSources": 92,
   "deprecatedSources": 0,
   "successfulSources": 83,
   "failedSources": 9,
   "coverageRatio": 0.9021739130434783,
-  "recentArticles": 20,
+  "recentArticles": 29,
   "thresholds": {
     "minimumCoverageRatio": 0.5,
     "minimumRecentArticles": 3
@@ -106,9 +106,10 @@
       "sourceId": "lcamtuf-substack-com-12",
       "name": "lcamtuf.substack.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 20,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
     },
     {
       "sourceId": "mitchellh-com-13",
@@ -180,9 +181,10 @@
       "sourceId": "garymarcus-substack-com-21",
       "name": "garymarcus.substack.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 20,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
     },
     {
       "sourceId": "rachelbythebay-com-22",
@@ -246,7 +248,7 @@
       "name": "evanhahn.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 8,
+      "articleCount": 7,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -318,7 +320,7 @@
       "name": "susam.net",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 9,
+      "articleCount": 10,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -397,10 +399,9 @@
       "sourceId": "filfre-net-48",
       "name": "filfre.net",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 429"
+      "health": "healthy",
+      "articleCount": 10,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "blog-jim-nielsen-com-49",
@@ -502,9 +503,10 @@
       "sourceId": "gwern-net-61",
       "name": "gwern.net",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 14,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
     },
     {
       "sourceId": "berthub-eu-62",
@@ -542,10 +544,9 @@
       "sourceId": "beej-us-66",
       "name": "beej.us",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "timeout"
+      "health": "healthy",
+      "articleCount": 45,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "hey-paris-67",
@@ -584,9 +585,10 @@
       "sourceId": "worksonmymachine-substack-com-71",
       "name": "worksonmymachine.substack.com",
       "registryStatus": "active",
-      "health": "healthy",
-      "articleCount": 20,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
+      "health": "failed",
+      "articleCount": 0,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
+      "error": "HTTP 403"
     },
     {
       "sourceId": "philiplaine-com-72",
@@ -657,7 +659,7 @@
       "name": "martinalderson.com",
       "registryStatus": "active",
       "health": "healthy",
-      "articleCount": 71,
+      "articleCount": 72,
       "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
@@ -704,10 +706,9 @@
       "sourceId": "aresluna-org-86",
       "name": "aresluna.org",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 429"
+      "health": "healthy",
+      "articleCount": 19,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "michael-stapelberg-ch-87",
@@ -737,10 +738,9 @@
       "sourceId": "mjg59-dreamwidth-org-90",
       "name": "mjg59.dreamwidth.org",
       "registryStatus": "active",
-      "health": "failed",
-      "articleCount": 0,
-      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check.",
-      "error": "HTTP 504"
+      "health": "healthy",
+      "articleCount": 25,
+      "reason": "Imported from the upstream Karpathy HN Popularity Contest 2025 registry; continuously audited by the V2 health check."
     },
     {
       "sourceId": "computer-rip-91",
